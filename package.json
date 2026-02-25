@@ -6,7 +6,10 @@
   "scripts": {
     "dev": "pnpm -F playground dev",
     "build": "pnpm -r build",
-    "lint": "pnpm -r lint"
+    "lint": "pnpm -r lint",
+    "manifest:preview": "node tools/preview/generate-manifest.mjs",
+    "smoke:preview": "node tools/preview/smoke.mjs",
+    "screenshot:preview": "node tools/screenshot/index.mjs"
   },
   "devDependencies": {
     "typescript": "^5.7.0",
@@ -17,6 +20,7 @@
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "unocss": "^0.65.0",
-    "sass": "^1.83.0"
+    "sass": "^1.83.0",
+    "playwright": "^1.52.0"
   }
 }

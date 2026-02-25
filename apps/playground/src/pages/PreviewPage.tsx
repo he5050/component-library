@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
-import { getPreviewEntry, listPreviewNames } from "../previewRegistry";
+import { getPreviewEntry, listPreviewConflicts, listPreviewNames } from "../previewRegistry";
 
 class PreviewErrorBoundary extends React.Component<
   { children: React.ReactNode },
@@ -22,9 +22,9 @@ class PreviewErrorBoundary extends React.Component<
   render() {
     if (this.state.error) {
       return (
-        <div className="max-w-lg bg-red-50 border border-red-200 rounded-xl p-6">
-          <h2 className="text-lg font-semibold text-red-700 mb-2">组件渲染失败</h2>
-          <p className="text-red-600 text-sm leading-relaxed">
+        <div className="max-w-lg rounded-lg border border-red-200 bg-red-50 p-5">
+          <h2 className="mb-2 text-base font-semibold text-red-600">组件渲染失败</h2>
+          <p className="text-sm leading-6 text-red-500">
             {this.state.error.message || "组件运行时抛出异常，请检查 props 或组件逻辑。"}
           </p>
         </div>
@@ -42,21 +42,22 @@ function PreviewPage() {
   const componentName = component || "";
   const entry = getPreviewEntry(componentName);
   const availableComponents = listPreviewNames();
+  const previewConflicts = listPreviewConflicts();
   const Component = entry?.component;
 
   if (!Component) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-6">
-        <div className="text-center bg-white rounded-2xl p-12 shadow-sm border border-primary-100 max-w-2xl">
-          <div className="w-16 h-16 bg-primary-50 rounded-full flex items-center justify-center mx-auto mb-6">
-            <svg className="w-8 h-8 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 p-6">
+        <div className="max-w-2xl rounded-lg border border-gray-200 bg-white p-10 text-center shadow-[0_1px_2px_rgba(0,0,0,0.04)]">
+          <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-blue-50">
+            <svg className="h-7 w-7 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
-          <h1 className="text-2xl font-display font-bold text-primary-900 mb-2">
+          <h1 className="mb-2 text-2xl font-semibold text-gray-800">
             组件未找到
           </h1>
-          <p className="text-primary-600 mb-6">
+          <p className="mb-6 text-sm leading-6 text-gray-600">
             组件 "{componentName}" 不存在。已启用自动映射，请确认文件在
             <code className="mx-1">src/components</code>
             或
@@ -64,16 +65,24 @@ function PreviewPage() {
             下并导出 React 组件。
           </p>
           {availableComponents.length > 0 && (
-            <div className="text-left bg-primary-50 border border-primary-100 rounded-xl p-4 mb-6">
-              <p className="text-sm text-primary-700 mb-2 font-medium">已发现可预览项：</p>
-              <p className="text-sm text-primary-600 break-words">
+            <div className="mb-4 rounded-lg border border-gray-200 bg-gray-50 p-4 text-left">
+              <p className="mb-2 text-sm font-medium text-gray-700">已发现可预览项：</p>
+              <p className="break-words text-sm text-gray-600">
                 {availableComponents.join(", ")}
+              </p>
+            </div>
+          )}
+          {previewConflicts.length > 0 && (
+            <div className="mb-6 rounded-lg border border-amber-200 bg-amber-50 p-4 text-left">
+              <p className="mb-2 text-sm font-medium text-amber-700">命名冲突告警：</p>
+              <p className="break-words text-sm text-amber-700">
+                {previewConflicts.join(" | ")}
               </p>
             </div>
           )}
           <Link 
             to="/" 
-            className="inline-flex items-center px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-700 transition-colors font-medium"
+            className="inline-flex items-center rounded-md border border-transparent bg-blue-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-600"
           >
             返回首页
           </Link>
@@ -96,29 +105,34 @@ function PreviewPage() {
   });
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <header className="py-4 px-6 bg-white border-b border-primary-100">
-        <div className="max-w-4xl mx-auto flex items-center justify-between">
-          <Link to="/" className="text-primary-600 hover:text-primary transition-colors text-sm font-medium">
+    <div className="min-h-screen flex flex-col bg-gray-50">
+      <header className="border-b border-gray-200 bg-white px-6 py-3">
+        <div className="mx-auto flex max-w-5xl items-center justify-between gap-3">
+          <Link to="/" className="text-sm font-medium text-blue-500 transition-colors hover:text-blue-600">
             返回首页
           </Link>
-          <span className="text-primary-500 text-sm">
+          <span className="truncate text-xs text-gray-500 sm:text-sm">
             {componentName} · {entry.kind} · {entry.sourcePath}
           </span>
         </div>
       </header>
 
-      <main className="flex-1 flex items-center justify-center p-8">
-        <div className="bg-white rounded-2xl p-12 shadow-sm border border-primary-100">
+      <main className="flex flex-1 items-center justify-center p-6 sm:p-8">
+        <div className="w-full max-w-5xl rounded-lg border border-gray-200 bg-white p-6 shadow-[0_1px_3px_rgba(0,0,0,0.06)] sm:p-10">
           <PreviewErrorBoundary key={componentName}>
             <Component {...props} />
           </PreviewErrorBoundary>
         </div>
       </main>
 
-      <footer className="py-4 px-6 bg-white border-t border-primary-100">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-sm text-primary-600">
+      <footer className="border-t border-gray-200 bg-white px-6 py-3">
+        <div className="mx-auto max-w-5xl">
+          {previewConflicts.length > 0 && (
+            <div className="mb-1 text-xs text-amber-700 sm:text-sm">
+              发现命名冲突：{previewConflicts.join(" | ")}
+            </div>
+          )}
+          <div className="text-xs text-gray-600 sm:text-sm">
             <span className="font-medium">Props:</span>{" "}
             {Object.keys(props).length > 0 
               ? Object.entries(props).map(([k, v]) => `${k}="${v}"`).join(", ")

@@ -28,18 +28,23 @@ const toBaseName = (path: string): string => {
   return raw.replace(/\.(tsx|jsx|ts|js)$/, "");
 };
 
-const toAliasName = (path: string): string => {
-  return path
-    .replace(/^\.\//, "")
-    .replace(/\.(tsx|jsx|ts|js)$/, "")
-    .replace(/\//g, "-");
-};
-
 const toKind = (path: string): "component" | "demo" => {
   return path.includes("/demos/") ? "demo" : "component";
 };
 
 const registry = new Map<string, PreviewEntry>();
+const conflicts: string[] = [];
+
+const registerEntry = (name: string, entry: PreviewEntry) => {
+  const exists = registry.get(name);
+  if (!exists) {
+    registry.set(name, entry);
+    return;
+  }
+  if (exists.sourcePath !== entry.sourcePath) {
+    conflicts.push(`${name}: ${exists.sourcePath} <-> ${entry.sourcePath}`);
+  }
+};
 
 for (const [path, moduleExports] of Object.entries(moduleGlobs)) {
   if (/\/index\.(tsx|jsx|ts|js)$/.test(path)) {
@@ -47,44 +52,38 @@ for (const [path, moduleExports] of Object.entries(moduleGlobs)) {
   }
 
   const kind = toKind(path);
-  const baseName = toBaseName(path);
-  const aliasName = toAliasName(path);
-
+  // 每个文件只注册一个预览入口，避免同一组件多名称重复展示
   if (isComponentLike(moduleExports.default)) {
-    if (!registry.has(baseName)) {
-      registry.set(baseName, {
-        component: moduleExports.default,
-        kind,
-        sourcePath: path,
-      });
-    }
-    if (!registry.has(aliasName)) {
-      registry.set(aliasName, {
-        component: moduleExports.default,
-        kind,
-        sourcePath: path,
-      });
-    }
+    registerEntry(toBaseName(path), {
+      component: moduleExports.default,
+      kind,
+      sourcePath: path,
+    });
+    continue;
   }
 
-  for (const [exportName, exportValue] of Object.entries(moduleExports)) {
-    if (exportName === "default") {
-      continue;
-    }
-    if (!/^[A-Z]/.test(exportName)) {
-      continue;
-    }
-    if (!isComponentLike(exportValue)) {
-      continue;
-    }
-    if (!registry.has(exportName)) {
-      registry.set(exportName, {
-        component: exportValue,
-        kind,
-        sourcePath: path,
-      });
-    }
+  const namedExportEntry = Object.entries(moduleExports).find(
+    ([exportName, exportValue]) =>
+      exportName !== "default" &&
+      /^[A-Z]/.test(exportName) &&
+      isComponentLike(exportValue),
+  );
+
+  if (!namedExportEntry) {
+    continue;
   }
+
+  const [exportName, exportValue] = namedExportEntry;
+  registerEntry(exportName, {
+    component: exportValue as PreviewComponent,
+    kind,
+    sourcePath: path,
+  });
+}
+
+if (conflicts.length > 0) {
+  // 冲突时保留首个映射，同时输出告警帮助定位命名重复
+  console.warn("[previewRegistry] duplicate preview names detected:", conflicts);
 }
 
 export const getPreviewEntry = (name: string): PreviewEntry | undefined => {
@@ -93,4 +92,8 @@ export const getPreviewEntry = (name: string): PreviewEntry | undefined => {
 
 export const listPreviewNames = (): string[] => {
   return [...registry.keys()].sort((a, b) => a.localeCompare(b));
+};
+
+export const listPreviewConflicts = (): string[] => {
+  return [...conflicts];
 };

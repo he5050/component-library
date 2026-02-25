@@ -1,0 +1,58 @@
+name: Preview Smoke
+
+on:
+  pull_request:
+    paths:
+      - "apps/**"
+      - "tools/**"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - ".github/workflows/preview-smoke.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "apps/**"
+      - "tools/**"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - ".github/workflows/preview-smoke.yml"
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "pnpm"
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright Chromium
+        run: pnpm exec playwright install chromium
+
+      - name: Generate preview manifest
+        run: pnpm run manifest:preview
+
+      - name: Build playground
+        run: pnpm -F playground build
+
+      - name: Start preview server
+        run: |
+          nohup pnpm -F playground preview --host 127.0.0.1 --port 4173 > /tmp/playground-preview.log 2>&1 &
+
+      - name: Run preview smoke
+        run: pnpm run smoke:preview -- --base-url=http://127.0.0.1:4173
