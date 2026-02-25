@@ -13,7 +13,8 @@ import {
   X,
   ChevronRight,
 } from "lucide-react"
-import { listPreviewNames, getPreviewEntry } from "../previewRegistry"
+import { listPreviewNames } from "../previewRegistry"
+import Button from "../components/Button"
 
 // ==================== 类型定义 ====================
 
@@ -33,7 +34,49 @@ const componentMetadata: Record<string, ComponentMeta> = {
     name: "Button",
     category: "basic",
     tags: ["基础", "交互", "表单"],
-    description: "按钮组件，支持多种变体和尺寸",
+    description: "水墨风格按钮，融合传统印章美学与现代交互",
+  },
+  Card: {
+    name: "Card",
+    category: "basic",
+    tags: ["基础", "容器", "布局"],
+    description: "宣纸质感卡片，多层阴影营造立体层次",
+  },
+  Input: {
+    name: "Input",
+    category: "form",
+    tags: ["表单", "输入", "交互"],
+    description: "水墨输入框，聚焦时带有晕染涟漪效果",
+  },
+  Badge: {
+    name: "Badge",
+    category: "basic",
+    tags: ["基础", "标签", "状态"],
+    description: "印章风格标签，支持动态盖印动画",
+  },
+  Divider: {
+    name: "Divider",
+    category: "basic",
+    tags: ["基础", "分割", "装饰"],
+    description: "水墨分割线，模拟毛笔笔触效果",
+  },
+  Tooltip: {
+    name: "Tooltip",
+    category: "feedback",
+    tags: ["反馈", "提示", "交互"],
+    description: "水墨提示框，如书画题跋般优雅呈现",
+  },
+  Loading: {
+    name: "Loading",
+    category: "feedback",
+    tags: ["反馈", "加载", "状态"],
+    description: "水墨加载动画，旋转如墨滴晕染",
+  },
+  ComponentShowcase: {
+    name: "ComponentShowcase",
+    category: "demo",
+    tags: ["展示", "示例", "全部组件"],
+    description: "全部组件综合展示页面",
   },
   LucideDemo: {
     name: "LucideDemo",
@@ -76,6 +119,7 @@ function HomePage() {
   const [selectedTags, setSelectedTags] = useState<string[]>([])
   const [searchQuery, setSearchQuery] = useState("")
   const [filteredComponents, setFilteredComponents] = useState<string[]>([])
+  const hasSearchQuery = searchQuery.trim().length > 0
 
   // 获取所有组件
   const allComponents = useMemo(() => listPreviewNames(), [])
@@ -173,11 +217,17 @@ function HomePage() {
     setSearchQuery("")
   }
 
+  const hasFilters = activeCategory !== "all" || selectedTags.length > 0 || hasSearchQuery
+
   return (
     <div className="min-h-screen flex flex-col">
       {/* Hero 区域 */}
-      <header className="hero-section py-12 px-6 text-center opacity-0">
+      <header className="hero-section py-12 px-6 text-center opacity-0 relative">
+        <div className="absolute left-1/2 bottom-0 -translate-x-1/2 w-56 h-px bg-gradient-to-r from-transparent via-zhusha/40 to-transparent" />
         <div className="max-w-3xl mx-auto">
+          <p className="inline-flex items-center text-xs tracking-[0.2em] text-ink-medium uppercase mb-4 px-3 py-1 rounded-full border border-ink/10 bg-paper-warm">
+            Ink Wash Component Library
+          </p>
           <h1 className="text-4xl font-display font-bold text-ink-deep mb-3 tracking-wide">
             水墨组件库
           </h1>
@@ -190,7 +240,7 @@ function HomePage() {
       <main className="flex-1 px-6 pb-16">
         <div className="max-w-5xl mx-auto space-y-8">
           {/* 过滤区域 */}
-          <section className="filter-section ink-card p-6 opacity-0">
+          <section className="filter-section ink-card p-6 opacity-0 border border-ink/12 shadow-[0_6px_22px_rgba(26,26,26,0.08)]">
             {/* 搜索框 */}
             <div className="relative mb-6">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-ink-light" />
@@ -201,7 +251,7 @@ function HomePage() {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-10 pr-4 py-2.5 bg-paper border border-ink/10 rounded-ink text-ink-thick placeholder:text-ink-light focus:outline-none focus:border-zhusha/50 focus:ring-2 focus:ring-zhusha/10 transition-all"
               />
-              {searchQuery && (
+              {hasSearchQuery && (
                 <button
                   onClick={() => setSearchQuery("")}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-light hover:text-ink-thick"
@@ -269,18 +319,15 @@ function HomePage() {
             </div>
 
             {/* 已选过滤条件 */}
-            {(activeCategory !== "all" || selectedTags.length > 0 || searchQuery) && (
+            {hasFilters && (
               <div className="flex items-center gap-3 pt-4 border-t border-ink/5">
                 <span className="text-sm text-ink-light">
                   已选: {filteredComponents.length} 个组件
                 </span>
-                <button
-                  onClick={clearFilters}
-                  className="text-sm text-zhusha hover:text-haitang flex items-center gap-1 transition-colors"
-                >
+                <Button variant="ghost" size="sm" onClick={clearFilters}>
                   <X className="w-3.5 h-3.5" />
                   清除过滤
-                </button>
+                </Button>
               </div>
             )}
           </section>
@@ -293,12 +340,14 @@ function HomePage() {
                   <Search className="w-12 h-12 mx-auto opacity-30" />
                 </div>
                 <p className="text-ink-medium">未找到匹配的组件</p>
-                <button
+                <Button
+                  variant="outline"
+                  size="sm"
                   onClick={clearFilters}
-                  className="mt-4 text-zhusha hover:text-haitang text-sm transition-colors"
+                  className="mt-4"
                 >
                   清除过滤条件
-                </button>
+                </Button>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -313,7 +362,7 @@ function HomePage() {
                     <Link
                       key={name}
                       to={`/preview/${name}`}
-                      className="component-card ink-card p-5 group hover:shadow-ink-hover hover:-translate-y-0.5 transition-all duration-200 opacity-0"
+                      className="component-card ink-card p-5 group border border-ink/10 hover:border-zhusha/20 hover:shadow-ink-hover hover:-translate-y-0.5 transition-all duration-200 opacity-0"
                     >
                       <div className="flex items-start justify-between mb-3">
                         <div
@@ -325,7 +374,7 @@ function HomePage() {
                             style={{ color: categoryInfo.color }}
                           />
                         </div>
-                        <span className="text-xs text-ink-light px-2 py-1 bg-ink-pale/50 rounded-full">
+                        <span className="text-xs text-ink-light px-2 py-1 bg-ink-pale/50 rounded-full border border-ink/10">
                           {categoryInfo.label}
                         </span>
                       </div>
@@ -358,7 +407,7 @@ function HomePage() {
           </section>
 
           {/* 使用方式说明 */}
-          <section className="ink-card p-8">
+          <section className="ink-card p-8 border border-ink/10">
             <h2 className="text-xl font-display font-semibold text-ink-deep mb-4">
               使用方式
             </h2>
@@ -395,7 +444,7 @@ variant=primary
           </section>
 
           {/* 设计理念 */}
-          <section className="ink-card p-8">
+          <section className="ink-card p-8 border border-ink/10">
             <h2 className="text-xl font-display font-semibold text-ink-deep mb-4">
               设计理念
             </h2>

@@ -31,6 +31,8 @@ import {
   Twitter,
   Linkedin,
   Youtube,
+  Minus as MinusIcon,
+  Plus as PlusIcon,
 } from "lucide-react"
 
 interface LucideDemoProps {
@@ -96,9 +98,6 @@ const iconGroups = [
   },
 ]
 
-// 所有图标扁平化列表，用于搜索
-const allIcons = iconGroups.flatMap(group => group.icons)
-
 // 水墨禅意动画配置
 const animeConfig = {
   easing: {
@@ -115,14 +114,17 @@ const animeConfig = {
 }
 
 function LucideDemo({
-  size = 20,
-  strokeWidth = 1.5,
+  size: initialSize = 20,
+  strokeWidth: initialStrokeWidth = 1.5,
 }: LucideDemoProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const titleRef = useRef<HTMLDivElement>(null)
   const configRef = useRef<HTMLDivElement>(null)
   const groupsRef = useRef<HTMLDivElement>(null)
   const [searchQuery, setSearchQuery] = useState("")
+  const [size, setSize] = useState(initialSize)
+  const [strokeWidth, setStrokeWidth] = useState(initialStrokeWidth)
+  const hasSearchQuery = searchQuery.trim().length > 0
 
   // 根据搜索词过滤图标
   const filteredGroups = useMemo(() => {
@@ -143,45 +145,34 @@ function LucideDemo({
       defaults: { ease: animeConfig.easing.inkFade },
     })
 
-    // 卡片整体淡入
     tl.add(containerRef.current, {
       opacity: [0, 1],
       translateY: [20, 0],
       scale: [0.98, 1],
       duration: animeConfig.duration.slow,
     })
-
-    // 标题区域
     .add(titleRef.current, {
       opacity: [0, 1],
       translateY: [15, 0],
       duration: animeConfig.duration.normal,
     }, "-=300")
-
-    // 配置信息
     .add(configRef.current, {
       opacity: [0, 1],
       translateX: [-10, 0],
       duration: animeConfig.duration.normal,
     }, "-=200")
-
-    // 图标分组依次入场
     .add(".icon-group", {
       opacity: [0, 1],
       translateY: [20, 0],
       duration: animeConfig.duration.normal,
       delay: stagger(80),
     }, "-=200")
-
-    // 图标网格涟漪入场
     .add(".icon-item", {
       opacity: [0, 1],
       scale: [0.8, 1],
       duration: animeConfig.duration.normal,
       delay: stagger(20, { grid: [6, 5], from: "center" }),
     }, "-=400")
-
-    // 底部信息
     .add(".footer-info", {
       opacity: [0, 1],
       duration: animeConfig.duration.normal,
@@ -208,7 +199,15 @@ function LucideDemo({
     })
   }, [filteredGroups])
 
-  // 图标悬停动画
+  // 参数变化时的动画
+  useEffect(() => {
+    animate(".icon-wrapper svg", {
+      scale: [0.8, 1],
+      duration: animeConfig.duration.normal,
+      ease: animeConfig.easing.inkFloat,
+    })
+  }, [size, strokeWidth])
+
   const handleIconEnter = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     const target = e.currentTarget
     const iconWrapper = target.querySelector(".icon-wrapper")
@@ -218,31 +217,24 @@ function LucideDemo({
 
     remove([iconWrapper, iconBg, iconLine, iconLabel])
 
-    // 图标放大并轻微旋转
     const tl = createTimeline({ defaults: { duration: animeConfig.duration.fast } })
     tl.add(iconWrapper, {
       scale: 1.2,
       rotate: "5deg",
       ease: animeConfig.easing.inkFloat,
     })
-
-    // 背景晕染扩散
     tl.add(iconBg, {
       opacity: [0, 0.6],
       scale: [0.5, 1.5],
       ease: animeConfig.easing.inkSpread,
       duration: animeConfig.duration.normal,
     }, 0)
-
-    // 底部装饰线展开
     tl.add(iconLine, {
       width: [0, 24],
       opacity: [0, 0.6],
       ease: animeConfig.easing.inkSoft,
       duration: animeConfig.duration.normal,
     }, 0)
-
-    // 文字颜色变化
     tl.add(iconLabel, {
       color: "#333333",
       ease: animeConfig.easing.inkSoft,
@@ -264,33 +256,28 @@ function LucideDemo({
       rotate: "0deg",
       ease: animeConfig.easing.inkSoft,
     })
-
     tl.add(iconBg, {
       opacity: 0,
       scale: 1,
       ease: animeConfig.easing.inkFade,
     }, 0)
-
     tl.add(iconLine, {
       width: 0,
       opacity: 0,
       ease: animeConfig.easing.inkSoft,
     }, 0)
-
     tl.add(iconLabel, {
       color: "#999999",
       ease: animeConfig.easing.inkSoft,
     }, 0)
   }, [])
 
-  // 点击涟漪效果
   const handleIconClick = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     const target = e.currentTarget
     const rect = target.getBoundingClientRect()
     const x = e.clientX - rect.left
     const y = e.clientY - rect.top
 
-    // 创建涟漪元素
     const ripple = document.createElement("span")
     ripple.className = "absolute rounded-full bg-zhusha/20 pointer-events-none"
     ripple.style.left = `${x - 25}px`
@@ -308,7 +295,6 @@ function LucideDemo({
       onComplete: () => ripple.remove(),
     })
 
-    // 图标点击反馈
     const iconWrapper = target.querySelector(".icon-wrapper")
     tl.add(iconWrapper, {
       scale: [1.2, 1.1],
@@ -357,7 +343,7 @@ function LucideDemo({
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full pl-10 pr-10 py-2.5 bg-paper border border-ink/10 rounded-ink text-ink-thick placeholder:text-ink-light focus:outline-none focus:border-zhusha/50 focus:ring-2 focus:ring-zhusha/10 transition-all"
           />
-          {searchQuery && (
+          {hasSearchQuery && (
             <button
               onClick={() => setSearchQuery("")}
               className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-light hover:text-ink-thick transition-colors"
@@ -366,24 +352,124 @@ function LucideDemo({
             </button>
           )}
         </div>
-        {searchQuery && (
+        {hasSearchQuery && (
           <p className="mt-2 text-xs text-ink-light">
             找到 {totalFilteredIcons} 个图标
           </p>
         )}
       </div>
 
-      {/* 配置信息 */}
+      {/* 配置控制面板 */}
       <div
         ref={configRef}
-        className="mb-6 p-4 bg-ink-pale rounded-lg border border-ink/10 opacity-0"
+        className="mb-6 p-5 bg-ink-pale rounded-lg border border-ink/10 opacity-0"
       >
-        <div className="text-xs text-ink-medium mb-2 uppercase tracking-wider font-medium">
-          当前配置
+        <div className="flex items-center justify-between mb-4">
+          <div className="text-xs text-ink-medium uppercase tracking-wider font-medium">
+            配置参数
+          </div>
+          <button
+            onClick={() => {
+              setSize(initialSize)
+              setStrokeWidth(initialStrokeWidth)
+            }}
+            className="text-xs text-zhusha hover:text-haitang transition-colors"
+          >
+            重置默认值
+          </button>
         </div>
-        <div className="flex gap-6 text-sm text-ink-thick font-mono">
-          <span>size: {size}px</span>
-          <span>strokeWidth: {strokeWidth}</span>
+
+        {/* 尺寸控制 */}
+        <div className="mb-4">
+          <div className="flex items-center justify-between mb-2">
+            <label className="text-sm text-ink-thick">图标尺寸 (size)</label>
+            <span className="text-sm font-mono text-ink-medium">{size}px</span>
+          </div>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setSize(Math.max(12, size - 2))}
+              className="p-1.5 rounded bg-paper border border-ink/10 hover:border-zhusha/50 transition-colors"
+            >
+              <MinusIcon className="w-4 h-4 text-ink-thick" />
+            </button>
+            <input
+              type="range"
+              min="12"
+              max="48"
+              step="2"
+              value={size}
+              onChange={(e) => setSize(Number(e.target.value))}
+              className="flex-1 h-2 bg-ink-200 rounded-lg appearance-none cursor-pointer accent-zhusha"
+            />
+            <button
+              onClick={() => setSize(Math.min(48, size + 2))}
+              className="p-1.5 rounded bg-paper border border-ink/10 hover:border-zhusha/50 transition-colors"
+            >
+              <PlusIcon className="w-4 h-4 text-ink-thick" />
+            </button>
+          </div>
+        </div>
+
+        {/* 线宽控制 */}
+        <div>
+          <div className="flex items-center justify-between mb-2">
+            <label className="text-sm text-ink-thick">线条粗细 (strokeWidth)</label>
+            <span className="text-sm font-mono text-ink-medium">{strokeWidth}</span>
+          </div>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setStrokeWidth(Math.max(0.5, strokeWidth - 0.5))}
+              className="p-1.5 rounded bg-paper border border-ink/10 hover:border-zhusha/50 transition-colors"
+            >
+              <MinusIcon className="w-4 h-4 text-ink-thick" />
+            </button>
+            <input
+              type="range"
+              min="0.5"
+              max="3"
+              step="0.5"
+              value={strokeWidth}
+              onChange={(e) => setStrokeWidth(Number(e.target.value))}
+              className="flex-1 h-2 bg-ink-200 rounded-lg appearance-none cursor-pointer accent-zhusha"
+            />
+            <button
+              onClick={() => setStrokeWidth(Math.min(3, strokeWidth + 0.5))}
+              className="p-1.5 rounded bg-paper border border-ink/10 hover:border-zhusha/50 transition-colors"
+            >
+              <PlusIcon className="w-4 h-4 text-ink-thick" />
+            </button>
+          </div>
+        </div>
+
+        {/* 快捷预设 */}
+        <div className="mt-4 pt-4 border-t border-ink/10">
+          <div className="text-xs text-ink-medium mb-2">快捷预设</div>
+          <div className="flex flex-wrap gap-2">
+            <button
+              onClick={() => { setSize(16); setStrokeWidth(1) }}
+              className="px-3 py-1.5 text-xs bg-paper border border-ink/10 rounded hover:border-zhusha/50 transition-colors"
+            >
+              紧凑 (16/1)
+            </button>
+            <button
+              onClick={() => { setSize(20); setStrokeWidth(1.5) }}
+              className="px-3 py-1.5 text-xs bg-paper border border-ink/10 rounded hover:border-zhusha/50 transition-colors"
+            >
+              默认 (20/1.5)
+            </button>
+            <button
+              onClick={() => { setSize(24); setStrokeWidth(2) }}
+              className="px-3 py-1.5 text-xs bg-paper border border-ink/10 rounded hover:border-zhusha/50 transition-colors"
+            >
+              醒目 (24/2)
+            </button>
+            <button
+              onClick={() => { setSize(32); setStrokeWidth(2.5) }}
+              className="px-3 py-1.5 text-xs bg-paper border border-ink/10 rounded hover:border-zhusha/50 transition-colors"
+            >
+              大号 (32/2.5)
+            </button>
+          </div>
         </div>
       </div>
 
@@ -395,7 +481,7 @@ function LucideDemo({
             <p>未找到匹配的图标</p>
             <button
               onClick={() => setSearchQuery("")}
-              className="mt-2 text-zhusha hover:text-haitang text-sm transition-colors"
+              className="mt-3 px-4 py-2 text-sm text-zhusha hover:text-haitang transition-colors"
             >
               清除搜索
             </button>
@@ -423,10 +509,7 @@ function LucideDemo({
                     onMouseLeave={handleIconLeave}
                     onClick={handleIconClick}
                   >
-                    {/* 水墨晕染背景 */}
                     <div className="icon-bg absolute inset-0 bg-gradient-radial from-zhusha/10 to-transparent opacity-0 rounded-lg" />
-
-                    {/* 图标 */}
                     <div className="icon-wrapper relative z-10">
                       <Icon
                         size={size}
@@ -434,13 +517,9 @@ function LucideDemo({
                         className="text-ink-thick group-hover:text-zhusha transition-colors duration-200"
                       />
                     </div>
-
-                    {/* 图标名称 */}
                     <span className="icon-label relative z-10 text-xs text-ink-light mt-3 truncate w-full text-center font-mono">
                       {name}
                     </span>
-
-                    {/* 底部装饰线 */}
                     <div className="icon-line absolute bottom-2 left-1/2 -translate-x-1/2 h-0.5 bg-zhusha/40 w-0 opacity-0" />
                   </div>
                 ))}
