@@ -1,2 +1,6 @@
 .vercel
 /node_modules
+apps/playground/dist
+apps/playground/node_modules
+dist/
+node_modules/
