@@ -6,7 +6,7 @@ import { chromium } from "playwright";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const projectRoot = path.resolve(__dirname, "..", "..");
-const manifestPath = path.resolve(projectRoot, "apps/playground/preview-manifest.json");
+const manifestPath = path.resolve(projectRoot, "preview-manifest.json");
 const cliBaseUrlArg = process.argv.find((arg) => arg.startsWith("--base-url="));
 const baseUrl = cliBaseUrlArg?.split("=")[1] || process.env.PREVIEW_BASE_URL || "http://127.0.0.1:4173";
 
@@ -77,10 +77,10 @@ async function main() {
       const renderFailed = await page.getByText("组件渲染失败").isVisible();
 
       if (notFound) {
-        throw new Error(`页面返回“组件未找到”`);
+        throw new Error(`页面返回"组件未找到"`);
       }
       if (renderFailed) {
-        throw new Error(`页面返回“组件渲染失败”`);
+        throw new Error(`页面返回"组件渲染失败"`);
       }
       if (errors.length > 0) {
         throw new Error(errors.join(" | "));

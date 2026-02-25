@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useCallback } from "react"
-import { createTimeline, stagger, remove } from "animejs"
+import React, { useEffect, useRef, useCallback, useState, useMemo } from "react"
+import { createTimeline, stagger, remove, animate } from "animejs"
 import {
   Camera,
   Heart,
@@ -96,6 +96,9 @@ const iconGroups = [
   },
 ]
 
+// 所有图标扁平化列表，用于搜索
+const allIcons = iconGroups.flatMap(group => group.icons)
+
 // 水墨禅意动画配置
 const animeConfig = {
   easing: {
@@ -119,6 +122,20 @@ function LucideDemo({
   const titleRef = useRef<HTMLDivElement>(null)
   const configRef = useRef<HTMLDivElement>(null)
   const groupsRef = useRef<HTMLDivElement>(null)
+  const [searchQuery, setSearchQuery] = useState("")
+
+  // 根据搜索词过滤图标
+  const filteredGroups = useMemo(() => {
+    if (!searchQuery.trim()) return iconGroups
+    
+    const query = searchQuery.toLowerCase()
+    return iconGroups.map(group => ({
+      ...group,
+      icons: group.icons.filter(icon => 
+        icon.name.toLowerCase().includes(query)
+      )
+    })).filter(group => group.icons.length > 0)
+  }, [searchQuery])
 
   // 入场动画
   useEffect(() => {
@@ -179,6 +196,17 @@ function LucideDemo({
       remove(".footer-info")
     }
   }, [])
+
+  // 搜索变化时的动画
+  useEffect(() => {
+    animate(".icon-item", {
+      opacity: [0, 1],
+      scale: [0.9, 1],
+      duration: animeConfig.duration.normal,
+      delay: stagger(10),
+      ease: animeConfig.easing.inkFade,
+    })
+  }, [filteredGroups])
 
   // 图标悬停动画
   const handleIconEnter = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
@@ -289,6 +317,8 @@ function LucideDemo({
     }, 0)
   }, [])
 
+  const totalFilteredIcons = filteredGroups.reduce((acc, g) => acc + g.icons.length, 0)
+
   return (
     <div
       ref={containerRef}
@@ -305,6 +335,42 @@ function LucideDemo({
         <p className="text-ink-medium text-sm">
           开源、轻量、可定制的 SVG 图标库
         </p>
+        <a
+          href="https://lucide.dev"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1.5 mt-3 text-sm text-zhusha hover:text-haitang transition-colors"
+        >
+          <ExternalLink className="w-3.5 h-3.5" />
+          访问官网 lucide.dev
+        </a>
+      </div>
+
+      {/* 搜索框 */}
+      <div className="mb-6">
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-ink-light" />
+          <input
+            type="text"
+            placeholder="搜索图标..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full pl-10 pr-10 py-2.5 bg-paper border border-ink/10 rounded-ink text-ink-thick placeholder:text-ink-light focus:outline-none focus:border-zhusha/50 focus:ring-2 focus:ring-zhusha/10 transition-all"
+          />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery("")}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-ink-light hover:text-ink-thick transition-colors"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          )}
+        </div>
+        {searchQuery && (
+          <p className="mt-2 text-xs text-ink-light">
+            找到 {totalFilteredIcons} 个图标
+          </p>
+        )}
       </div>
 
       {/* 配置信息 */}
@@ -323,59 +389,85 @@ function LucideDemo({
 
       {/* 图标分组 */}
       <div ref={groupsRef} className="space-y-8">
-        {iconGroups.map((group) => (
-          <div
-            key={group.title}
-            className="icon-group pb-6 border-b border-ink/10 last:border-0 last:pb-0 opacity-0"
-          >
-            <h3 className="text-sm font-semibold text-ink-thick mb-4 flex items-center">
-              <span className="w-1.5 h-1.5 rounded-full bg-zhusha mr-2"></span>
-              {group.title}
-            </h3>
-            <div className="grid grid-cols-6 gap-3">
-              {group.icons.map(({ name, icon: Icon }) => (
-                <div
-                  key={name}
-                  className="icon-item relative flex flex-col items-center p-4 rounded-lg bg-paper border border-ink/8 cursor-pointer group overflow-hidden opacity-0"
-                  title={name}
-                  onMouseEnter={handleIconEnter}
-                  onMouseLeave={handleIconLeave}
-                  onClick={handleIconClick}
-                >
-                  {/* 水墨晕染背景 */}
-                  <div className="icon-bg absolute inset-0 bg-gradient-radial from-zhusha/10 to-transparent opacity-0 rounded-lg" />
-
-                  {/* 图标 */}
-                  <div className="icon-wrapper relative z-10">
-                    <Icon
-                      size={size}
-                      strokeWidth={strokeWidth}
-                      className="text-ink-thick group-hover:text-zhusha transition-colors duration-200"
-                    />
-                  </div>
-
-                  {/* 图标名称 */}
-                  <span className="icon-label relative z-10 text-xs text-ink-light mt-3 truncate w-full text-center font-mono">
-                    {name}
-                  </span>
-
-                  {/* 底部装饰线 */}
-                  <div className="icon-line absolute bottom-2 left-1/2 -translate-x-1/2 h-0.5 bg-zhusha/40 w-0 opacity-0" />
-                </div>
-              ))}
-            </div>
+        {filteredGroups.length === 0 ? (
+          <div className="text-center py-12 text-ink-medium">
+            <Search className="w-12 h-12 mx-auto mb-4 opacity-30" />
+            <p>未找到匹配的图标</p>
+            <button
+              onClick={() => setSearchQuery("")}
+              className="mt-2 text-zhusha hover:text-haitang text-sm transition-colors"
+            >
+              清除搜索
+            </button>
           </div>
-        ))}
+        ) : (
+          filteredGroups.map((group) => (
+            <div
+              key={group.title}
+              className="icon-group pb-6 border-b border-ink/10 last:border-0 last:pb-0 opacity-0"
+            >
+              <h3 className="text-sm font-semibold text-ink-thick mb-4 flex items-center">
+                <span className="w-1.5 h-1.5 rounded-full bg-zhusha mr-2"></span>
+                {group.title}
+                <span className="ml-2 text-xs text-ink-light font-normal">
+                  ({group.icons.length})
+                </span>
+              </h3>
+              <div className="grid grid-cols-6 gap-3">
+                {group.icons.map(({ name, icon: Icon }) => (
+                  <div
+                    key={name}
+                    className="icon-item relative flex flex-col items-center p-4 rounded-lg bg-paper border border-ink/8 cursor-pointer group overflow-hidden opacity-0"
+                    title={name}
+                    onMouseEnter={handleIconEnter}
+                    onMouseLeave={handleIconLeave}
+                    onClick={handleIconClick}
+                  >
+                    {/* 水墨晕染背景 */}
+                    <div className="icon-bg absolute inset-0 bg-gradient-radial from-zhusha/10 to-transparent opacity-0 rounded-lg" />
+
+                    {/* 图标 */}
+                    <div className="icon-wrapper relative z-10">
+                      <Icon
+                        size={size}
+                        strokeWidth={strokeWidth}
+                        className="text-ink-thick group-hover:text-zhusha transition-colors duration-200"
+                      />
+                    </div>
+
+                    {/* 图标名称 */}
+                    <span className="icon-label relative z-10 text-xs text-ink-light mt-3 truncate w-full text-center font-mono">
+                      {name}
+                    </span>
+
+                    {/* 底部装饰线 */}
+                    <div className="icon-line absolute bottom-2 left-1/2 -translate-x-1/2 h-0.5 bg-zhusha/40 w-0 opacity-0" />
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))
+        )}
       </div>
 
       {/* 底部信息 */}
       <div className="footer-info mt-8 pt-4 border-t-2 border-ink/10 text-center text-sm text-ink-medium opacity-0">
         共展示{" "}
         <span className="font-semibold text-ink-thick">
-          {iconGroups.reduce((acc, g) => acc + g.icons.length, 0)}
+          {totalFilteredIcons}
         </span>{" "}
         个图标 · Lucide 共有{" "}
         <span className="font-semibold text-ink-thick">1671+</span> 图标
+        <span className="mx-2">·</span>
+        <a
+          href="https://lucide.dev/icons/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-zhusha hover:text-haitang transition-colors inline-flex items-center gap-1"
+        >
+          浏览全部图标
+          <ChevronRight className="w-3 h-3" />
+        </a>
       </div>
     </div>
   )

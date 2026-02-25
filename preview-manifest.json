@@ -1,0 +1,18 @@
+{
+  "generatedAt": "2026-02-25T09:23:02.208Z",
+  "entries": [
+    {
+      "name": "Button",
+      "kind": "component",
+      "sourcePath": "./components/Button.tsx",
+      "routePath": "/preview/Button"
+    },
+    {
+      "name": "LucideDemo",
+      "kind": "demo",
+      "sourcePath": "./demos/LucideDemo.tsx",
+      "routePath": "/preview/LucideDemo"
+    }
+  ],
+  "conflicts": []
+}

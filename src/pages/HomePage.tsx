@@ -13,7 +13,7 @@ import {
   X,
   ChevronRight,
 } from "lucide-react"
-import { listPreviewNames, getPreviewEntry, type PreviewEntry } from "../previewRegistry"
+import { listPreviewNames, getPreviewEntry } from "../previewRegistry"
 
 // ==================== 类型定义 ====================
 
@@ -304,7 +304,6 @@ function HomePage() {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {filteredComponents.map((name) => {
                   const meta = componentMetadata[name]
-                  const entry = getPreviewEntry(name)
                   const categoryInfo = meta
                     ? categoryLabels[meta.category]
                     : categoryLabels.demo

@@ -5,8 +5,8 @@ import { fileURLToPath } from "node:url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const projectRoot = path.resolve(__dirname, "..", "..");
-const srcRoot = path.resolve(projectRoot, "apps/playground/src");
-const manifestPath = path.resolve(projectRoot, "apps/playground/preview-manifest.json");
+const srcRoot = path.resolve(projectRoot, "src");
+const manifestPath = path.resolve(projectRoot, "preview-manifest.json");
 
 const SOURCE_GROUPS = [
   { kind: "component", dir: "components" },

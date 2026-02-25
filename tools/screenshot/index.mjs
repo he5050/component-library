@@ -6,7 +6,7 @@ import { chromium } from "playwright";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const projectRoot = path.resolve(__dirname, "..", "..");
-const manifestPath = path.resolve(projectRoot, "apps/playground/preview-manifest.json");
+const manifestPath = path.resolve(projectRoot, "preview-manifest.json");
 const screenshotDir = path.resolve(projectRoot, "screenshots");
 const baseUrl = process.env.PREVIEW_BASE_URL || "http://127.0.0.1:4173";
 

@@ -3,7 +3,7 @@ name: Preview Smoke
 on:
   pull_request:
     paths:
-      - "apps/**"
+      - "src/**"
       - "tools/**"
       - "package.json"
       - "pnpm-lock.yaml"
@@ -12,7 +12,7 @@ on:
     branches:
       - main
     paths:
-      - "apps/**"
+      - "src/**"
       - "tools/**"
       - "package.json"
       - "pnpm-lock.yaml"
@@ -47,12 +47,12 @@ jobs:
       - name: Generate preview manifest
         run: pnpm run manifest:preview
 
-      - name: Build playground
-        run: pnpm -F playground build
+      - name: Build
+        run: pnpm build
 
       - name: Start preview server
         run: |
-          nohup pnpm -F playground preview --host 127.0.0.1 --port 4173 > /tmp/playground-preview.log 2>&1 &
+          nohup pnpm preview --host 127.0.0.1 --port 4173 > /tmp/preview.log 2>&1 &
 
       - name: Run preview smoke
         run: pnpm run smoke:preview -- --base-url=http://127.0.0.1:4173

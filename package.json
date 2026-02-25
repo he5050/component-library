@@ -1,26 +1,33 @@
 {
-  "name": "demo-platform",
+  "name": "component-library-preview",
   "version": "1.0.0",
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "pnpm -F playground dev",
-    "build": "pnpm -r build",
-    "lint": "pnpm -r lint",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
     "manifest:preview": "node tools/preview/generate-manifest.mjs",
     "smoke:preview": "node tools/preview/smoke.mjs",
     "screenshot:preview": "node tools/screenshot/index.mjs"
   },
-  "devDependencies": {
-    "typescript": "^5.7.0",
-    "vite": "^6.0.0",
-    "@vitejs/plugin-react": "^4.3.0",
+  "dependencies": {
+    "lucide-react": "^0.563.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-router-dom": "^7.1.0"
+  },
+  "devDependencies": {
+    "@types/animejs": "^3.1.13",
+    "@types/node": "^22.0.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
-    "unocss": "^0.65.0",
+    "@vitejs/plugin-react": "^4.3.0",
+    "animejs": "^4.3.6",
+    "playwright": "^1.52.0",
     "sass": "^1.83.0",
-    "playwright": "^1.52.0"
+    "typescript": "^5.7.0",
+    "unocss": "^0.65.0",
+    "vite": "^6.0.0"
   }
 }
