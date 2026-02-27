@@ -2,24 +2,48 @@
 @import url('https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.1.0/style.css');
 
 :root {
-  /* ==================== 水墨五色系统 ==================== */
-  --ink-deep: #1a1a1a;      /* 焦墨 - 最浓 */
-  --ink-thick: #333333;     /* 浓墨 */
-  --ink-medium: #666666;    /* 重墨 */
-  --ink-light: #999999;     /* 淡墨 */
-  --ink-pale: #f5f5f0;      /* 清墨 - 最淡 */
+  /* ==================== 色彩权重分配（60-30-10）==================== */
   
-  /* ==================== 朱砂色系 ==================== */
+  /* 主导色（60%）- 水墨五色系统 */
+  --ink-deep: #1a1a1a;      /* 焦墨 - 主文字、标题 */
+  --ink-thick: #333333;     /* 浓墨 - 次要文字、边框 */
+  --ink-medium: #666666;    /* 重墨 - 辅助文字、禁用态 */
+  --ink-light: #999999;     /* 淡墨 - 占位符、分割线 */
+  --ink-pale: #f5f5f0;      /* 清墨 - 背景色（宣纸色） */
+  
+  /* 中间色阶扩展 */
+  --ink-850: #262626;       /* 焦浓之间 */
+  --ink-550: #4d4d4d;       /* 浓重之间 */
+  --ink-750: #333333;       /* 重淡之间 */
+  
+  /* 辅助色（30%）- 宣纸色系 */
+  --paper: #f5f5f0;
+  --paper-warm: #faf8f3;
+  --paper-aged: #f0ebe0;
+  --paper-cool: #f2f4f5;
+  --paper-edge: #e8e0d0;    /* 宣纸边缘泛黄 */
+  
+  /* 强调色（10%）- 朱砂色系（限制使用）*/
   --vermilion: #c04851;
   --vermilion-light: #e8d4d4;
   --vermilion-dark: #a03a42;
   --seal-red: #b93a3a;      /* 印章红 */
+  --zhusha: #c04851;        /* 朱砂 - 仅关键强调 */
+  --haitang: #db5a6b;       /* 海棠红 */
   
-  /* ==================== 宣纸色系 ==================== */
-  --paper: #f5f5f0;
-  --paper-warm: #faf8f3;
-  --paper-aged: #f0ebe0;
-  --paper-edge: #e8e0d0;    /* 宣纸边缘泛黄 */
+  /* 链接专用色 - 靛青 */
+  --color-link: #1772b4;
+  --color-link-hover: #25b4c8;
+  
+  /* Focus 状态专用色 - 青碧 */
+  --color-focus: #48c0a3;
+  --color-focus-ring: rgba(72, 192, 163, 0.3);
+  
+  /* 语义色 */
+  --color-info: #1772b4;
+  --color-success: #789262;
+  --color-warning: #ca6924;
+  --color-danger: #c35c67;
   
   /* ==================== 水墨层次 ==================== */
   --ink-wash-1: rgba(26, 26, 26, 0.04);
@@ -29,17 +53,99 @@
   --ink-wash-5: rgba(26, 26, 26, 0.28);
   
   /* ==================== 阴影层次 ==================== */
-  --shadow-sm: 0 1px 3px rgba(26, 26, 26, 0.06);
-  --shadow-md: 0 3px 12px rgba(26, 26, 26, 0.08);
-  --shadow-lg: 0 8px 28px rgba(26, 26, 26, 0.12);
-  --shadow-xl: 0 16px 48px rgba(26, 26, 26, 0.16);
+  --shadow-xs: 0 1px 2px rgba(26, 26, 26, 0.04);
+  --shadow-sm: 0 2px 4px rgba(26, 26, 26, 0.06);
+  --shadow-md: 0 4px 8px rgba(26, 26, 26, 0.08);
+  --shadow-lg: 0 8px 16px rgba(26, 26, 26, 0.1);
+  --shadow-xl: 0 16px 32px rgba(26, 26, 26, 0.12);
+  --shadow-2xl: 0 24px 48px rgba(26, 26, 26, 0.15);
   --shadow-glow: 0 0 20px rgba(192, 72, 81, 0.15);
+  --shadow-focus: 0 0 0 2px rgba(72, 192, 163, 0.3);
+  
+  /* 水墨晕染阴影 */
+  --shadow-ink: 0 2px 8px rgba(26, 26, 26, 0.04), 0 8px 24px rgba(26, 26, 26, 0.06), 0 16px 48px rgba(26, 26, 26, 0.04);
+  --shadow-ink-hover: 0 4px 12px rgba(26, 26, 26, 0.06), 0 12px 32px rgba(26, 26, 26, 0.08);
+  
+  /* ==================== 圆角系统 ==================== */
+  --radius-sm: 4px;
+  --radius-default: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-2xl: 24px;
   
   /* ==================== 动画时长 ==================== */
   --duration-fast: 150ms;
   --duration-normal: 300ms;
   --duration-slow: 500ms;
   --duration-ink-spread: 600ms;
+  
+  /* ==================== 间距系统 ==================== */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+}
+
+/* ==================== 暗色模式 ==================== */
+[data-theme="dark"] {
+  /* 背景层 */
+  --bg-primary: #0d0d0d;
+  --bg-secondary: #1a1a1a;
+  --bg-tertiary: #262626;
+  --bg-elevated: #333333;
+  
+  /* 文字层 */
+  --text-primary: #f5f5f0;
+  --text-secondary: #b3b3a8;
+  --text-muted: #737373;
+  --text-disabled: #4d4d4d;
+  
+  /* 边框层 */
+  --border-default: rgba(245, 245, 240, 0.1);
+  --border-hover: rgba(245, 245, 240, 0.2);
+  --border-focus: rgba(72, 192, 163, 0.5);
+  
+  /* 强调色 - 暗色模式提亮 */
+  --vermilion: #e85a5a;
+  --zhusha: #e85a5a;
+  --color-accent-glow: rgba(232, 90, 90, 0.3);
+  
+  /* 链接色 - 暗色模式调整 */
+  --color-link: #5a9fd4;
+  --color-link-hover: #7ab8e8;
+  
+  /* Focus 色调整 */
+  --color-focus: #5dd4b3;
+  --color-focus-ring: rgba(93, 212, 179, 0.4);
+  
+  /* 语义色调整 */
+  --color-info: #4a90c2;
+  --color-success: #8ab072;
+  --color-warning: #d4a024;
+  --color-danger: #d46a6a;
+  
+  /* 宣纸色调整 */
+  --paper: #1a1a1a;
+  --paper-warm: #1f1f1f;
+  --paper-aged: #262626;
+  --paper-cool: #1a1a1a;
+  
+  /* 水墨层次调整 */
+  --ink-wash-1: rgba(245, 245, 240, 0.04);
+  --ink-wash-2: rgba(245, 245, 240, 0.08);
+  --ink-wash-3: rgba(245, 245, 240, 0.12);
+  
+  /* 阴影调整 */
+  --shadow-color: rgba(0, 0, 0, 0.4);
+  --shadow-ink: 0 2px 8px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.4);
+  --shadow-ink-hover: 0 4px 12px rgba(0, 0, 0, 0.35), 0 12px 32px rgba(0, 0, 0, 0.45);
 }
 
 * {
@@ -50,6 +156,7 @@
 
 html {
   scroll-behavior: smooth;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 body {
@@ -70,14 +177,18 @@ body::before {
   left: 0;
   right: 0;
   bottom: 0;
-  /* 多层纹理叠加：粗纹理 + 细纹理 */
   background-image: 
     url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"),
     url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='fineNoise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23fineNoise)'/%3E%3C/svg%3E");
   background-size: 300px 300px, 150px 150px;
-  opacity: 0.035;
+  opacity: 0.025;
   pointer-events: none;
   z-index: -2;
+}
+
+/* 暗色模式纹理调整 */
+[data-theme="dark"] body::before {
+  opacity: 0.015;
 }
 
 /* ==================== 水墨晕染光晕层 ==================== */
@@ -89,18 +200,22 @@ body::after {
   right: 0;
   bottom: 0;
   background: 
-    /* 主光晕 - 左上角 */
     radial-gradient(ellipse 80% 50% at 15% 15%, rgba(26,26,26,0.025) 0%, transparent 60%),
-    /* 次光晕 - 右下角 */
     radial-gradient(ellipse 60% 40% at 85% 85%, rgba(26,26,26,0.02) 0%, transparent 50%),
-    /* 边缘泛黄 - 模拟宣纸边缘 */
     radial-gradient(ellipse 100% 100% at 50% 50%, transparent 60%, rgba(232, 224, 208, 0.4) 100%);
   pointer-events: none;
   z-index: -1;
 }
 
+/* 暗色模式光晕调整 */
+[data-theme="dark"] body::after {
+  background: 
+    radial-gradient(ellipse 80% 50% at 15% 15%, rgba(245,245,240,0.02) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 85% 85%, rgba(245,245,240,0.015) 0%, transparent 50%);
+}
+
 h1, h2, h3, h4, h5, h6 {
-  font-family: "LXGW WenKai", "Crimson Pro", Georgia, serif;
+  font-family: "LXGW WenKai", "Noto Serif SC", Georgia, serif;
   font-weight: 600;
   line-height: 1.4;
   color: var(--ink-deep);
@@ -108,31 +223,33 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1 {
-  font-size: 2rem;
+  font-size: clamp(1.75rem, 4vw + 1rem, 2.5rem);
   font-weight: 700;
 }
 
 h2 {
-  font-size: 1.5rem;
+  font-size: clamp(1.5rem, 3vw + 0.75rem, 2rem);
 }
 
 h3 {
-  font-size: 1.25rem;
+  font-size: clamp(1.25rem, 2vw + 0.5rem, 1.5rem);
 }
 
 p {
   line-height: 1.8;
   color: var(--ink-thick);
+  max-width: 65ch;
 }
 
+/* ==================== 链接样式 ==================== */
 a {
-  color: var(--vermilion);
+  color: var(--color-link);
   text-decoration: none;
   transition: color 0.2s ease;
 }
 
 a:hover {
-  color: var(--vermilion-light);
+  color: var(--color-link-hover);
   text-decoration: underline;
 }
 
@@ -159,13 +276,14 @@ pre code {
   padding: 0;
 }
 
+/* ==================== Focus 状态 - 青碧色 ==================== */
 :focus-visible {
-  outline: 2px solid var(--vermilion);
+  outline: 2px solid var(--color-focus);
   outline-offset: 2px;
 }
 
 ::selection {
-  background-color: var(--vermilion-light);
+  background-color: rgba(72, 192, 163, 0.25);
   color: var(--ink-deep);
 }
 
@@ -242,11 +360,8 @@ pre code {
 .ink-card {
   background-color: var(--paper);
   border: 1px solid rgba(26,26,26,0.06);
-  border-radius: 16px;
-  box-shadow: 
-    0 1px 3px rgba(26,26,26,0.04),
-    0 3px 12px rgba(26,26,26,0.06),
-    inset 0 1px 0 rgba(255,255,255,0.6);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-ink);
   transition: all var(--duration-normal) cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
@@ -264,12 +379,9 @@ pre code {
 }
 
 .ink-card:hover {
-  box-shadow: 
-    0 4px 12px rgba(26,26,26,0.08),
-    0 8px 28px rgba(26,26,26,0.1),
-    inset 0 1px 0 rgba(255,255,255,0.8);
+  box-shadow: var(--shadow-ink-hover);
   transform: translateY(-2px);
-  border-color: rgba(26,26,26,0.1);
+  border-color: rgba(192, 72, 81, 0.15);
 }
 
 /* ==================== 水墨晕染背景 ==================== */
@@ -374,8 +486,8 @@ pre code {
 }
 
 .ink-input:focus {
-  border-color: var(--vermilion);
-  box-shadow: 0 0 0 3px rgba(192, 72, 81, 0.1);
+  border-color: var(--color-focus);
+  box-shadow: 0 0 0 3px rgba(72, 192, 163, 0.15);
   background-color: var(--paper);
 }
 
@@ -429,6 +541,19 @@ pre code {
   opacity: 1;
 }
 
+/* ==================== 链接样式类 ==================== */
+.link-ink {
+  color: var(--color-link);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.link-ink:hover {
+  color: var(--color-link-hover);
+  text-decoration: underline;
+}
+
+/* ==================== 减少动画 ==================== */
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.01ms !important;
