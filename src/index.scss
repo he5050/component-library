@@ -4,17 +4,12 @@
 :root {
   /* ==================== 色彩权重分配（60-30-10）==================== */
   
-  /* 主导色（60%）- 水墨五色系统 */
-  --ink-deep: #1a1a1a;      /* 焦墨 - 主文字、标题 */
-  --ink-thick: #333333;     /* 浓墨 - 次要文字、边框 */
-  --ink-medium: #666666;    /* 重墨 - 辅助文字、禁用态 */
-  --ink-light: #999999;     /* 淡墨 - 占位符、分割线 */
+  /* 主导色（60%）- 水墨五色系统（暖灰色温） */
+  --ink-deep: #1a1917;      /* 焦墨 - 主文字、标题 */
+  --ink-thick: #33312c;     /* 浓墨 - 次要文字、边框 */
+  --ink-medium: #63605a;    /* 重墨 - 辅助文字 */
+  --ink-light: #8a877e;     /* 淡墨 - 占位符、分割线（不满足 AA，仅装饰性文字） */
   --ink-pale: #f5f5f0;      /* 清墨 - 背景色（宣纸色） */
-  
-  /* 中间色阶扩展 */
-  --ink-850: #262626;       /* 焦浓之间 */
-  --ink-550: #4d4d4d;       /* 浓重之间 */
-  --ink-750: #333333;       /* 重淡之间 */
   
   /* 辅助色（30%）- 宣纸色系 */
   --paper: #f5f5f0;
@@ -46,11 +41,11 @@
   --color-danger: #c35c67;
   
   /* ==================== 水墨层次 ==================== */
-  --ink-wash-1: rgba(26, 26, 26, 0.04);
-  --ink-wash-2: rgba(26, 26, 26, 0.08);
-  --ink-wash-3: rgba(26, 26, 26, 0.12);
-  --ink-wash-4: rgba(26, 26, 26, 0.18);
-  --ink-wash-5: rgba(26, 26, 26, 0.28);
+  --ink-wash-1: rgba(26, 25, 23, 0.04);
+  --ink-wash-2: rgba(26, 25, 23, 0.08);
+  --ink-wash-3: rgba(26, 25, 23, 0.12);
+  --ink-wash-4: rgba(26, 25, 23, 0.18);
+  --ink-wash-5: rgba(26, 25, 23, 0.28);
   
   /* ==================== 阴影层次 ==================== */
   --shadow-xs: 0 1px 2px rgba(26, 26, 26, 0.04);
@@ -91,6 +86,23 @@
   --space-10: 2.5rem;
   --space-12: 3rem;
   --space-16: 4rem;
+
+  /* ==================== Z-Index 层级栈 ==================== */
+  --z-base: 0;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-overlay: 300;
+  --z-modal: 400;
+  --z-popover: 500;
+  --z-toast: 600;
+
+  /* ==================== Elevation 体系 ==================== */
+  --elevation-0: none;
+  --elevation-1: var(--shadow-xs);
+  --elevation-2: var(--shadow-ink);
+  --elevation-3: var(--shadow-ink-hover);
+  --elevation-4: var(--shadow-lg);
+  --elevation-5: var(--shadow-xl);
 }
 
 /* ==================== 暗色模式 ==================== */
@@ -112,10 +124,10 @@
   --border-hover: rgba(245, 245, 240, 0.2);
   --border-focus: rgba(72, 192, 163, 0.5);
   
-  /* 强调色 - 暗色模式提亮 */
-  --vermilion: #e85a5a;
-  --zhusha: #e85a5a;
-  --color-accent-glow: rgba(232, 90, 90, 0.3);
+  /* 强调色 - 暗色模式提亮（保持朱砂色相） */
+  --vermilion: #d4606a;
+  --zhusha: #d4606a;
+  --color-accent-glow: rgba(212, 96, 106, 0.3);
   
   /* 链接色 - 暗色模式调整 */
   --color-link: #5a9fd4;
@@ -555,10 +567,13 @@ pre code {
 
 /* ==================== 减少动画 ==================== */
 @media (prefers-reduced-motion: reduce) {
-  * {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 

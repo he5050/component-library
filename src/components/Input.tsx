@@ -3,6 +3,7 @@ import React from "react"
 interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size"> {
   label?: string
   error?: string
+  hint?: string
   size?: "sm" | "md" | "lg"
 }
 
@@ -12,29 +13,42 @@ const sizeStyles = {
   lg: "h-12 px-5 text-base rounded-[12px]",
 }
 
-function Input({ label, error, size = "md", className = "", ...rest }: InputProps) {
+function Input({ label, error, hint, size = "md", className = "", id, ...rest }: InputProps) {
+  const inputId = id || label?.toLowerCase().replace(/\s/g, "-")
   return (
     <div className="flex flex-col gap-1.5">
       {label && (
-        <label className="text-sm text-ink-thick font-medium tracking-wide">
+        <label htmlFor={inputId} className="text-sm text-ink-thick font-medium tracking-wide">
           {label}
         </label>
       )}
       <input
+        id={inputId}
         className={`
-          bg-paper-warm border border-ink/10 rounded-ink font-body text-ink-deep 
-          placeholder:text-ink-light transition-all duration-200 outline-none 
-          hover:bg-paper hover:border-ink/15 
+          bg-paper-warm border border-ink/10 rounded-ink font-body text-ink-deep
+          placeholder:text-ink-light transition-all duration-200 outline-none
+          hover:bg-paper hover:border-ink/15
           focus:border-focus focus:shadow-ink-input-focus focus:bg-paper
           disabled:opacity-45 disabled:cursor-not-allowed disabled:bg-ink-pale/30
           ${error ? "border-danger focus:border-danger focus:shadow-[0_0_0_3px_rgba(195,92,103,0.15)]" : ""}
           ${sizeStyles[size]}
           ${className}
         `}
+        aria-invalid={error ? true : undefined}
+        aria-describedby={
+          error ? `${inputId}-error` : hint ? `${inputId}-hint` : undefined
+        }
         {...rest}
       />
       {error && (
-        <span className="text-xs text-danger mt-1">{error}</span>
+        <span id={`${inputId}-error`} className="text-xs text-danger flex items-center gap-1" role="alert">
+          ✕ {error}
+        </span>
+      )}
+      {!error && hint && (
+        <span id={`${inputId}-hint`} className="text-xs text-ink-light">
+          {hint}
+        </span>
       )}
     </div>
   )

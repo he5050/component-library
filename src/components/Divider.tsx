@@ -1,5 +1,3 @@
-import React from "react"
-
 type DividerVariant = "default" | "brush" | "dashed" | "gradient"
 
 interface DividerProps {

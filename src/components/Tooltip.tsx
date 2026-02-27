@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react"
+import React, { useState, useRef } from "react"
 
 interface TooltipProps {
   content: string
@@ -19,10 +19,10 @@ function Tooltip({ content, children, position = "top", className = "" }: Toolti
   }
 
   const arrowStyles = {
-    top: "top-full left-1/2 -translate-x-1/2 border-t-ink-850",
-    bottom: "bottom-full left-1/2 -translate-x-1/2 border-b-ink-850",
-    left: "left-full top-1/2 -translate-y-1/2 border-l-ink-850",
-    right: "right-full top-1/2 -translate-y-1/2 border-r-ink-850",
+    top: "top-full left-1/2 -translate-x-1/2 border-t-ink-deep",
+    bottom: "bottom-full left-1/2 -translate-x-1/2 border-b-ink-deep",
+    left: "left-full top-1/2 -translate-y-1/2 border-l-ink-deep",
+    right: "right-full top-1/2 -translate-y-1/2 border-r-ink-deep",
   }
 
   return (
@@ -34,10 +34,12 @@ function Tooltip({ content, children, position = "top", className = "" }: Toolti
       {isVisible && (
         <div
           ref={tooltipRef}
+          role="tooltip"
           className={`
-            absolute z-50 px-2.5 py-1.5
-            bg-ink-850 text-paper text-xs rounded-md
-            whitespace-nowrap animate-fade-in
+            absolute z-[var(--z-popover,500)] px-2.5 py-1.5
+            bg-ink-deep text-paper text-xs rounded-md
+            whitespace-nowrap pointer-events-none
+            opacity-0 animate-[fade-in_0.15s_ease_forwards]
             ${positionStyles[position]}
             ${className}
           `}>
