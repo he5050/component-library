@@ -42,6 +42,7 @@ const componentMetadata: Record<string, ComponentMetadata> = {
 	Radio: { name: "Radio 单选框", description: "单选框组件", category: "基础组件", layer: "base" },
 	Tabs: { name: "Tabs 标签页", description: "标签页切换组件", category: "基础组件", layer: "base" },
 	LucideDemo: { name: "图标演示", description: "Lucide 图标库演示", category: "示例演示", layer: "base" },
+	PtsDemo: { name: "Pts.js", description: "数学运算的艺术化表达工具库", category: "高阶组件", layer: "advanced" },
 }
 
 const componentToDemoMap: Record<string, string> = {

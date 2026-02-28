@@ -7,50 +7,68 @@ const __dirname = path.dirname(__filename);
 const projectRoot = path.resolve(__dirname, "..", "..");
 const srcRoot = path.resolve(projectRoot, "src");
 const componentsDir = path.resolve(srcRoot, "components");
+const demosDir = path.resolve(srcRoot, "demos");
 const manifestPath = path.resolve(projectRoot, "preview-manifest.json");
 
-const VALID_EXTENSIONS = new Set([".tsx", ".jsx", ".ts", ".js"]);
-const PURE_DEMOS = ["LucideDemo"];
+const VALID_EXTENSIONS = new Set([".tsx", "jsx", ".ts", ".js"]);
+const EXCLUDED_FILES = new Set(["index.tsx", "index.jsx", "index.ts", "index.js"]);
 
 /**
- * 读取可预览组件文件。
- * 规则与 previewRegistry 保持一致：组件路由只使用组件名。
- * @returns {Promise<Array<{ name: string; sourcePath: string }>>}
+ * 递归读取目录下的所有组件文件
+ * @param {string} dir - 目录路径
+ * @param {string} basePath - 相对于 src 的路径前缀
+ * @returns {Promise<Array<{ name: string; sourcePath: string; kind: string }>>}
  */
-async function readComponentEntries() {
-  const entries = await fs.readdir(componentsDir, { withFileTypes: true });
-
-  return entries
-    .filter((entry) => entry.isFile())
-    .filter((entry) => {
-      const ext = path.extname(entry.name);
-      return VALID_EXTENSIONS.has(ext) && !/^index\.(tsx|jsx|ts|js)$/.test(entry.name);
-    })
-    .map((entry) => {
-      const name = entry.name.replace(/\.(tsx|jsx|ts|js)$/, "");
-      return {
-        name,
-        sourcePath: `./components/${entry.name}`,
-      };
-    })
-    .sort((a, b) => a.name.localeCompare(b.name));
+async function readDirEntries(dir, basePath) {
+  try {
+    const entries = await fs.readdir(dir, { withFileTypes: true });
+    
+    const results = [];
+    
+    for (const entry of entries) {
+      if (entry.isDirectory()) {
+        // 递归读取子目录
+        const subDir = path.join(dir, entry.name);
+        const subBasePath = path.join(basePath, entry.name);
+        const subEntries = await readDirEntries(subDir, subBasePath);
+        results.push(...subEntries);
+      } else if (entry.isFile()) {
+        const ext = path.extname(entry.name);
+        if (VALID_EXTENSIONS.has(ext) && !EXCLUDED_FILES.has(entry.name)) {
+          const name = entry.name.replace(/\.(tsx|jsx|ts|js)$/, "");
+          const isDemo = basePath.startsWith("demos");
+          results.push({
+            name,
+            sourcePath: `./${basePath}/${entry.name}`,
+            kind: isDemo ? "demo" : "component",
+          });
+        }
+      }
+    }
+    
+    return results;
+  } catch (error) {
+    // 目录不存在时返回空数组
+    return [];
+  }
 }
 
 async function main() {
-  const componentEntries = await readComponentEntries();
+  const componentEntries = await readDirEntries(componentsDir, "components");
+  const demoEntries = await readDirEntries(demosDir, "demos");
 
   const entries = [
     ...componentEntries.map((entry) => ({
       name: entry.name,
-      kind: "component",
+      kind: entry.kind,
       sourcePath: entry.sourcePath,
       routePath: `/preview/${encodeURIComponent(entry.name)}`,
     })),
-    ...PURE_DEMOS.map((name) => ({
-      name,
-      kind: "demo",
-      sourcePath: `./demos/${name}.tsx`,
-      routePath: `/preview/${encodeURIComponent(name)}`,
+    ...demoEntries.map((entry) => ({
+      name: entry.name,
+      kind: entry.kind,
+      sourcePath: entry.sourcePath,
+      routePath: `/preview/${encodeURIComponent(entry.name)}`,
     })),
   ];
 
