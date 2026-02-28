@@ -1,14 +1,14 @@
 import { animate, stagger } from "animejs"
 
 const easing = {
-  ease: [0.4, 0, 0.2, 1],
-  easeIn: [0.4, 0, 1, 1],
-  easeOut: [0, 0, 0.2, 1],
-  easeInOut: [0.4, 0, 0.2, 1],
-  inkSpread: [0.25, 0.46, 0.45, 0.94],
-  inkFade: [0.4, 0, 0.2, 1],
-  inkFloat: [0.34, 1.56, 0.64, 1],
-  inkSoft: [0.4, 0, 0.6, 1],
+  ease: "cubic-bezier(0.4, 0, 0.2, 1)",
+  easeIn: "cubic-bezier(0.4, 0, 1, 1)",
+  easeOut: "cubic-bezier(0, 0, 0.2, 1)",
+  easeInOut: "cubic-bezier(0.4, 0, 0.2, 1)",
+  inkSpread: "cubic-bezier(0.25, 0.46, 0.45, 0.94)",
+  inkFade: "cubic-bezier(0.4, 0, 0.2, 1)",
+  inkFloat: "cubic-bezier(0.34, 1.56, 0.64, 1)",
+  inkSoft: "cubic-bezier(0.4, 0, 0.6, 1)",
 }
 
 const duration = {

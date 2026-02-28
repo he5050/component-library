@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
-import Button from "../components/Button"
-import Input from "../components/Input"
-import { listPreviewEntries, listCategories, type PreviewEntry } from "../previewRegistry"
+import Button from "../components/base/Button"
+import Input from "../components/base/Input"
+import { listHomepageEntries, type PreviewEntry } from "../previewRegistry"
 import { fadeInStagger, cardEnter, rippleEffect } from "../utils/animations"
 
-type CategoryType = "全部" | "基础组件" | "示例演示"
+type CategoryType = "全部" | "示例演示" | "高阶组件"
 
 function HomePage() {
 	const location = useLocation()
@@ -19,8 +19,8 @@ function HomePage() {
 	const search = params.get("search") || ""
 	const category = params.get("category") || ""
 
-	const allEntries = listPreviewEntries()
-	const categories: CategoryType[] = ["全部", "基础组件", "示例演示"]
+	const allEntries = listHomepageEntries()
+	const categories: CategoryType[] = ["全部", "示例演示", "高阶组件"]
 
 	useEffect(() => {
 		if (search) setSearchQuery(search)
@@ -149,12 +149,12 @@ function HomePage() {
 												className={`
                         text-xs px-2 py-0.5 rounded-full border
                         ${
-													entry.category === "基础组件"
+													entry.category === "高阶组件"
 														? "bg-dian/5 text-dian border-dian/20"
 														: "bg-zhusha/5 text-zhusha border-zhusha/20"
 												}
                       `}>
-												{entry.category === "基础组件" ? "组件" : "Demo"}
+												{entry.category === "高阶组件" ? "高阶" : "Demo"}
 											</span>
 										</div>
 										<p className='text-sm text-ink-medium leading-relaxed mb-3'>{entry.description}</p>

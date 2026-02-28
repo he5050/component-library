@@ -1,5 +1,3 @@
-import React from "react"
-
 interface RadioProps {
 	label: string
 	checked: boolean
@@ -43,14 +41,14 @@ function Radio({ label, checked, onChange, disabled = false, name, className = "
 				checked={checked}
 				onChange={() => !disabled && onChange()}
 				disabled={disabled}
-				className='sr-only'
+				className='peer sr-only'
 			/>
 			<span
 				className={`
           w-5 h-5 rounded-full border-2 flex items-center justify-center
           transition-all duration-200
           ${checked ? "border-ink-deep" : "bg-paper border-ink/20 hover:border-ink/40"}
-          focus-within:ring-2 focus-within:ring-focus focus-within:ring-offset-2
+          peer-focus-visible:ring-2 peer-focus-visible:ring-focus peer-focus-visible:ring-offset-2
         `}>
 				{checked && <span className='w-2.5 h-2.5 rounded-full bg-ink-deep' />}
 			</span>

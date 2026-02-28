@@ -1,5 +1,3 @@
-import React from "react"
-
 interface CheckboxProps {
 	label: string
 	checked: boolean
@@ -39,14 +37,14 @@ function Checkbox({ label, checked, onChange, disabled = false, className = "" }
 				checked={checked}
 				onChange={(e) => !disabled && onChange(e.target.checked)}
 				disabled={disabled}
-				className='sr-only'
+				className='peer sr-only'
 			/>
 			<span
 				className={`
           w-5 h-5 rounded border-2 flex items-center justify-center
           transition-all duration-200
           ${checked ? "bg-ink-deep border-ink-deep" : "bg-paper border-ink/20 hover:border-ink/40"}
-          focus-within:ring-2 focus-within:ring-focus focus-within:ring-offset-2
+          peer-focus-visible:ring-2 peer-focus-visible:ring-focus peer-focus-visible:ring-offset-2
         `}>
 				{checked && (
 					<svg className='w-3 h-3 text-paper' fill='none' viewBox='0 0 24 24' stroke='currentColor'>

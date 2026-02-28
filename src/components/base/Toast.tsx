@@ -68,7 +68,7 @@ function Toast({ type = "info", message, duration = 3000, onClose, className = "
 			role="status"
 			aria-live="polite"
 			className={`
-        fixed top-6 right-6 z-[var(--z-toast,600)]
+        z-[var(--z-toast,600)]
         flex items-center gap-3 px-4 py-3
         rounded-lg border shadow-lg
         text-sm text-ink-thick font-body
