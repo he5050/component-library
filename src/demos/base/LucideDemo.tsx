@@ -257,13 +257,13 @@ function LucideDemo({
                   {group.icons.map(({ name, icon: Icon }) => (
                     <div
                       key={name}
-                      className="relative flex flex-col items-center p-3.5 rounded-lg bg-transparent border border-transparent hover:border-ink/10 hover:bg-paper-warm/40 cursor-pointer transition-all duration-300 group"
+                      className="relative flex flex-col items-center p-3.5 rounded-lg bg-paper-warm/60 border border-ink/5 hover:border-ink/15 hover:bg-paper-warm cursor-pointer transition-all duration-300 group"
                       onMouseEnter={() => setHoveredIcon(name)}
                       onMouseLeave={() => setHoveredIcon(null)}
                       title={name}
                     >
                       <div 
-                        className={`absolute inset-0 rounded-lg bg-zhusha/[0.03] transition-opacity duration-300 ${
+                        className={`absolute inset-0 rounded-lg bg-zhusha/[0.04] transition-opacity duration-300 ${
                           hoveredIcon === name ? 'opacity-100' : 'opacity-0'
                         }`}
                       />
