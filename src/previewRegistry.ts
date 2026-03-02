@@ -43,7 +43,13 @@ const componentMetadata: Record<string, ComponentMetadata> = {
 	Tabs: { name: "Tabs 标签页", description: "标签页切换组件", category: "基础组件", layer: "base" },
 	LucideDemo: { name: "图标演示", description: "Lucide 图标库演示", category: "示例演示", layer: "base" },
 	PtsDemo: { name: "Pts.js", description: "数学运算的艺术化表达工具库", category: "高阶组件", layer: "advanced" },
-	IsotopeDemo: { name: "Isotope 网格布局", description: "智能动态网格布局系统，支持过滤、排序和动画", category: "示例演示", layer: "base" },
+	IsotopeDemo: {
+		name: "Isotope 网格布局",
+		description: "智能动态网格布局系统，支持过滤、排序和动画",
+		category: "示例演示",
+		layer: "base",
+	},
+	AnimationDemo: { name: "动画库演示", description: "水墨风格动画库演示", category: "高阶组件", layer: "advanced" },
 }
 
 const componentToDemoMap: Record<string, string> = {
