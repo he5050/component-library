@@ -49,6 +49,12 @@ const componentMetadata: Record<string, ComponentMetadata> = {
 		category: "示例演示",
 		layer: "base",
 	},
+	ScrollMagicDemo: {
+		name: "ScrollMagic 滚动动画",
+		description: "轻量级滚动动画库，支持视差、固定、进度追踪等效果",
+		category: "示例演示",
+		layer: "base",
+	},
 	AnimationDemo: { name: "动画库演示", description: "水墨风格动画库演示", category: "高阶组件", layer: "advanced" },
 }
 
