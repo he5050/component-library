@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Isotope 聚合演示 - 完整功能展示</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      overflow: hidden;
+    }
+
+    header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 40px;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+    }
+
+    header p {
+      font-size: 1.1em;
+      opacity: 0.9;
+    }
+
+    .nav-tabs {
+      display: flex;
+      background: #f8f9fa;
+      border-bottom: 2px solid #e9ecef;
+      flex-wrap: wrap;
+    }
+
+    .nav-tab {
+      flex: 1;
+      min-width: 150px;
+      padding: 15px 20px;
+      text-align: center;
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      font-size: 1em;
+      font-weight: 600;
+      color: #495057;
+      transition: all 0.3s ease;
+      border-bottom: 3px solid transparent;
+    }
+
+    .nav-tab:hover {
+      background: rgba(102, 126, 234, 0.1);
+    }
+
+    .nav-tab.active {
+      color: #667eea;
+      border-bottom-color: #667eea;
+      background: white;
+    }
+
+    .demo-section {
+      display: none;
+      padding: 40px;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .demo-section.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .demo-title {
+      font-size: 1.8em;
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .demo-description {
+      color: #666;
+      margin-bottom: 30px;
+      line-height: 1.6;
+    }
+
+    .controls {
+      margin-bottom: 30px;
+      padding: 20px;
+      background: #f8f9fa;
+      border-radius: 10px;
+    }
+
+    .button-group {
+      display: inline-block;
+      margin-right: 20px;
+      margin-bottom: 10px;
+    }
+
+    .button-group h4 {
+      margin-bottom: 10px;
+      font-size: 0.9em;
+      color: #666;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin: 5px;
+      border: 2px solid #667eea;
+      background: white;
+      color: #667eea;
+      border-radius: 25px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      background: #667eea;
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+    }
+
+    button.is-checked {
+      background: #667eea;
+      color: white;
+    }
+
+    .grid {
+      display: block;
+    }
+
+    .grid-item {
+      float: left;
+      width: 20%;
+      padding: 10px;
+      transition: all 0.4s ease;
+    }
+
+    .grid-item-content {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 15px;
+      padding: 30px 20px;
+      text-align: center;
+      color: white;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+    }
+
+    .grid-item-content:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    .grid-item-content h3 {
+      font-size: 1.5em;
+      margin-bottom: 10px;
+    }
+
+    .grid-item-content p {
+      font-size: 0.9em;
+      opacity: 0.9;
+    }
+
+    .grid-item--width2 {
+      width: 40%;
+    }
+
+    .grid-item--height2 {
+      height: 400px;
+    }
+
+    .grid-item--height2 .grid-item-content {
+      height: 100%;
+    }
+
+    /* 不同颜色的项目 */
+    .item-red .grid-item-content { background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%); }
+    .item-blue .grid-item-content { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+    .item-green .grid-item-content { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+    .item-yellow .grid-item-content { background: linear-gradient(135deg, #fddb92 0%, #d1fdff 100%); color: #333; }
+    .item-purple .grid-item-content { background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%); }
+    .item-orange .grid-item-content { background: linear-gradient(135deg, #f6d365 0%, #fda085 100%); }
+
+    .code-block {
+      margin-top: 30px;
+      background: #282c34;
+      border-radius: 10px;
+      padding: 20px;
+      overflow-x: auto;
+    }
+
+    .code-block pre {
+      margin: 0;
+    }
+
+    .code-block code {
+      font-family: 'Fira Code', 'Consolas', monospace;
+      font-size: 0.9em;
+      color: #abb2bf;
+      line-height: 1.6;
+    }
+
+    .code-block .comment { color: #5c6370; }
+    .code-block .keyword { color: #c678dd; }
+    .code-block .string { color: #98c379; }
+    .code-block .function { color: #61afef; }
+
+    /* 响应式 */
+    @media (max-width: 768px) {
+      .grid-item {
+        width: 50%;
+      }
+      
+      .nav-tabs {
+        flex-direction: column;
+      }
+      
+      .nav-tab {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🎨 Isotope 聚合演示</h1>
+      <p>完整的网格布局库功能展示 - 过滤 · 排序 · 动态布局</p>
+    </header>
+
+    <nav class="nav-tabs">
+      <button class="nav-tab active" data-tab="demo1">示例 1: 基础过滤</button>
+      <button class="nav-tab" data-tab="demo2">示例 2: 排序功能</button>
+      <button class="nav-tab" data-tab="demo3">示例 3: 组合过滤</button>
+      <button class="nav-tab" data-tab="demo4">示例 4: 布局模式</button>
+      <button class="nav-tab" data-tab="demo5">示例 5: 动态操作</button>
+      <button class="nav-tab" data-tab="demo6">示例 6: URL Hash</button>
+    </nav>
+
+    <!-- 示例 1: 基础过滤 -->
+    <section id="demo1" class="demo-section active">
+      <h2 class="demo-title">🔍 基础过滤功能</h2>
+      <p class="demo-description">
+        点击按钮过滤不同类别的项目。Isotope 支持 CSS 选择器、OR/AND/NOT 组合选择器以及自定义函数过滤。
+      </p>
+
+      <div class="controls">
+        <div class="button-group">
+          <h4>类别筛选</h4>
+          <button data-filter="*" class="is-checked">全部</button>
+          <button data-filter=".metal">金属</button>
+          <button data-filter=".transition">过渡金属</button>
+          <button data-filter=".alkali">碱金属</button>
+          <button data-filter=".alkaline-earth">碱土金属</button>
+        </div>
+      </div>
+
+      <div class="grid" id="grid1">
+        <div class="grid-item metal transition">
+          <div class="grid-item-content">
+            <h3>Fe</h3>
+            <p>铁 - 过渡金属</p>
+          </div>
+        </div>
+        <div class="grid-item metal transition">
+          <div class="grid-item-content">
+            <h3>Cu</h3>
+            <p>铜 - 过渡金属</p>
+          </div>
+        </div>
+        <div class="grid-item metal alkali">
+          <div class="grid-item-content">
+            <h3>Na</h3>
+            <p>钠 - 碱金属</p>
+          </div>
+        </div>
+        <div class="grid-item metal alkaline-earth">
+          <div class="grid-item-content">
+            <h3>Mg</h3>
+            <p>镁 - 碱土金属</p>
+          </div>
+        </div>
+        <div class="grid-item metal transition">
+          <div class="grid-item-content">
+            <h3>Zn</h3>
+            <p>锌 - 过渡金属</p>
+          </div>
+        </div>
+        <div class="grid-item metal alkali">
+          <div class="grid-item-content">
+            <h3>K</h3>
+            <p>钾 - 碱金属</p>
+          </div>
+        </div>
+        <div class="grid-item metal transition">
+          <div class="grid-item-content">
+            <h3>Ag</h3>
+            <p>银 - 过渡金属</p>
+          </div>
+        </div>
+        <div class="grid-item metal alkaline-earth">
+          <div class="grid-item-content">
+            <h3>Ca</h3>
+            <p>钙 - 碱土金属</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="code-block">
+        <pre><code><span class="comment">// 初始化 Isotope</span>
+<span class="keyword">const</span> grid1 = <span class="keyword">new</span> Isotope(<span class="string">'#grid1'</span>, {
+  itemSelector: <span class="string">'.grid-item'</span>,
+  layoutMode: <span class="string">'masonry'</span>
+});
+
+<span class="comment">// 按钮点击过滤</span>
+<span class="keyword">const</span> filterButtons = document.querySelectorAll(<span class="string">'#grid1 ~ .controls button'</span>);
+filterButtons.forEach(btn => {
+  btn.addEventListener(<span class="string">'click'</span>, () => {
+    <span class="comment">// 移除所有激活状态</span>
+    filterButtons.forEach(b => b.classList.remove(<span class="string">'is-checked'</span>));
+    <span class="comment">// 激活当前按钮</span>
+    btn.classList.add(<span class="string">'is-checked'</span>);
+    <span class="comment">// 应用过滤</span>
+    grid1.arrange({ filter: btn.getAttribute(<span class="string">'data-filter'</span>) });
+  });
+});</code></pre>
+      </div>
+    </section>
+
+    <!-- 示例 2: 排序功能 -->
+    <section id="demo2" class="demo-section">
+      <h2 class="demo-title">📊 排序功能演示</h2>
+      <p class="demo-description">
+        支持按名称、数字、自定义属性等多种方式排序，可升序/降序，也支持多条件排序和随机排序。
+      </p>
+
+      <div class="controls">
+        <div class="button-group">
+          <h4>排序方式</h4>
+          <button data-sort-by="original-order" class="is-checked">原始顺序</button>
+          <button data-sort-by="name">名称</button>
+          <button data-sort-by="number">数字</button>
+          <button data-sort-by="category">类别</button>
+          <button data-sort-by="random">随机</button>
+        </div>
+        <div class="button-group">
+          <h4>排序方向</h4>
+          <button data-sort-asc="true" class="is-checked">升序 ↑</button>
+          <button data-sort-asc="false">降序 ↓</button>
+        </div>
+      </div>
+
+      <div class="grid" id="grid2">
+        <div class="grid-item" data-category="metal" data-number="26">
+          <div class="grid-item-content item-red">
+            <h3 class="name">铁 (Fe)</h3>
+            <p class="number">原子序数：26</p>
+          </div>
+        </div>
+        <div class="grid-item" data-category="non-metal" data-number="6">
+          <div class="grid-item-content item-blue">
+            <h3 class="name">碳 (C)</h3>
+            <p class="number">原子序数：6</p>
+          </div>
+        </div>
+        <div class="grid-item" data-category="metal" data-number="11">
+          <div class="grid-item-content item-green">
+            <h3 class="name">钠 (Na)</h3>
+            <p class="number">原子序数：11</p>
+          </div>
+        </div>
+        <div class="grid-item" data-category="gas" data-number="8">
+          <div class="grid-item-content item-yellow">
+            <h3 class="name">氧 (O)</h3>
+            <p class="number">原子序数：8</p>
+          </div>
+        </div>
+        <div class="grid-item" data-category="metal" data-number="29">
+          <div class="grid-item-content item-purple">
+            <h3 class="name">铜 (Cu)</h3>
+            <p class="number">原子序数：29</p>
+          </div>
+        </div>
+        <div class="grid-item" data-category="gas" data-number="7">
+          <div class="grid-item-content item-orange">
+            <h3 class="name">氮 (N)</h3>
+            <p class="number">原子序数：7</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="code-block">
+        <pre><code><span class="comment">// 定义排序规则</span>
+<span class="keyword">const</span> grid2 = <span class="keyword">new</span> Isotope(<span class="string">'#grid2'</span>, {
+  itemSelector: <span class="string">'.grid-item'</span>,
+  getSortData: {
+    name: <span class="string">'.name'</span>,
+    number: <span class="string">'[data-number] parseInt'</span>,
+    category: <span class="string">'[data-category]'</span>
+  }
+});
+
+<span class="comment">// 排序按钮事件</span>
+<span class="keyword">let</span> sortAscending = <span class="keyword">true</span>;
+sortButtons.forEach(btn => {
+  btn.addEventListener(<span class="string">'click'</span>, () => {
+    <span class="keyword">if</span> (btn.hasAttribute(<span class="string">'data-sort-asc'</span>)) {
+      sortAscending = btn.getAttribute(<span class="string">'data-sort-asc'</span>) === <span class="string">'true'</span>;
+    }
+    grid2.arrange({
+      sortBy: btn.getAttribute(<span class="string">'data-sort-by'</span>),
+      sortAscending: sortAscending
+    });
+  });
+});</code></pre>
+      </div>
+    </section>
+
+    <!-- 示例 3: 组合过滤 -->
+    <section id="demo3" class="demo-section">
+      <h2 class="demo-title">🎯 组合过滤（多条件筛选）</h2>
+      <p class="demo-description">
+        同时从多个维度筛选项目，例如同时按颜色和大小筛选。每个按钮组独立控制一个过滤维度。
+      </p>
+
+      <div class="controls">
+        <div class="button-group" data-filter-group="color">
+          <h4>颜色</h4>
+          <button data-filter="" class="is-checked">全部</button>
+          <button data-filter=".item-red">红色</button>
+          <button data-filter=".item-blue">蓝色</button>
+          <button data-filter=".item-green">绿色</button>
+        </div>
+        <div class="button-group" data-filter-group="size">
+          <h4>尺寸</h4>
+          <button data-filter="" class="is-checked">全部</button>
+          <button data-filter=".small">小</button>
+          <button data-filter=".medium">中</button>
+          <button data-filter=".large">大</button>
+        </div>
+        <div class="button-group" data-filter-group="shape">
+          <h4>形状</h4>
+          <button data-filter="" class="is-checked">全部</button>
+          <button data-filter=".square">方形</button>
+          <button data-filter=".wide">宽形</button>
+          <button data-filter=".tall">高形</button>
+        </div>
+      </div>
+
+      <div class="grid" id="grid3">
+        <div class="grid-item small square item-red">
+          <div class="grid-item-content">
+            <h3>红色小方块</h3>
+            <p>Small Square</p>
+          </div>
+        </div>
+        <div class="grid-item medium wide item-blue">
+          <div class="grid-item-content grid-item--width2">
+            <h3>蓝色宽方块</h3>
+            <p>Medium Wide</p>
+          </div>
+        </div>
+        <div class="grid-item large tall item-green">
+          <div class="grid-item-content grid-item--height2">
+            <h3>绿色高方块</h3>
+            <p>Large Tall</p>
+          </div>
+        </div>
+        <div class="grid-item medium square item-blue">
+          <div class="grid-item-content">
+            <h3>蓝色中方块</h3>
+            <p>Medium Square</p>
+          </div>
+        </div>
+        <div class="grid-item small wide item-red">
+          <div class="grid-item-content grid-item--width2">
+            <h3>红色宽方块</h3>
+            <p>Small Wide</p>
+          </div>
+        </div>
+        <div class="grid-item large square item-green">
+          <div class="grid-item-content">
+            <h3>绿色大方块</h3>
+            <p>Large Square</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="code-block">
+        <pre><code><span class="comment">// 存储每组过滤条件</span>
+<span class="keyword">const</span> filters = {};
+
+<span class="comment">// 组合过滤逻辑</span>
+<span class="keyword">const</span> buttonGroups = document.querySelectorAll(<span class="string">'#grid3 ~ .controls .button-group'</span>);
+buttonGroups.forEach(group => {
+  <span class="keyword">const</span> filterGroup = group.getAttribute(<span class="string">'data-filter-group'</span>);
+  <span class="keyword">const</span> buttons = group.querySelectorAll(<span class="string">'button'</span>);
+  
+  buttons.forEach(btn => {
+    btn.addEventListener(<span class="string">'click'</span>, () => {
+      buttons.forEach(b => b.classList.remove(<span class="string">'is-checked'</span>));
+      btn.classList.add(<span class="string">'is-checked'</span>);
+      
+      <span class="comment">// 存储该组过滤条件</span>
+      filters[filterGroup] = btn.getAttribute(<span class="string">'data-filter'</span>);
+      
+      <span class="comment">// 合并所有过滤条件</span>
+      <span class="keyword">const</span> filterValue = Object.values(filters).join(<span class="string">''</span>);
+      grid3.arrange({ filter: filterValue || <span class="string">'*'</span> });
+    });
+  });
+});</code></pre>
+      </div>
+    </section>
+
+    <!-- 示例 4: 布局模式 -->
+    <section id="demo4" class="demo-section">
+      <h2 class="demo-title">📐 不同布局模式展示</h2>
+      <p class="demo-description">
+        Isotope 支持多种布局模式：Masonry（瀑布流）、FitRows（整齐网格）、CellsByRow（单元格）等，一键切换。
+      </p>
+
+      <div class="controls">
+        <div class="button-group">
+          <h4>布局模式</h4>
+          <button data-layout="masonry" class="is-checked">Masonry</button>
+          <button data-layout="fitRows">FitRows</button>
+          <button data-layout="cellsByRow">CellsByRow</button>
+          <button data-layout="vertical">Vertical</button>
+        </div>
+      </div>
+
+      <div class="grid" id="grid4">
+        <div class="grid-item">
+          <div class="grid-item-content item-red">
+            <h3>项目 1</h3>
+            <p>标准尺寸</p>
+          </div>
+        </div>
+        <div class="grid-item grid-item--width2">
+          <div class="grid-item-content item-blue">
+            <h3>项目 2</h3>
+            <p>双倍宽度</p>
+          </div>
+        </div>
+        <div class="grid-item">
+          <div class="grid-item-content item-green">
+            <h3>项目 3</h3>
+            <p>标准尺寸</p>
+          </div>
+        </div>
+        <div class="grid-item grid-item--height2">
+          <div class="grid-item-content item-yellow">
+            <h3>项目 4</h3>
+            <p>双倍高度</p>
+          </div>
+        </div>
+        <div class="grid-item">
+          <div class="grid-item-content item-purple">
+            <h3>项目 5</h3>
+            <p>标准尺寸</p>
+          </div>
+        </div>
+        <div class="grid-item grid-item--width2">
+          <div class="grid-item-content item-orange">
+            <h3>项目 6</h3>
+            <p>双倍宽度</p>
+          </div>
+        </div>
+        <div class="grid-item">
+          <div class="grid-item-content item-red">
+            <h3>项目 7</h3>
+            <p>标准尺寸</p>
+          </div>
+        </div>
+        <div class="grid-item">
+          <div class="grid-item-content item-blue">
+            <h3>项目 8</h3>
+            <p>标准尺寸</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="code-block">
+        <pre><code><span class="comment">// 切换布局模式</span>
+<span class="keyword">const</span> layoutButtons = document.querySelectorAll(<span class="string">'#grid4 ~ .controls button'</span>);
+layoutButtons.forEach(btn => {
+  btn.addEventListener(<span class="string">'click'</span>, () => {
+    layoutButtons.forEach(b => b.classList.remove(<span class="string">'is-checked'</span>));
+    btn.classList.add(<span class="string">'is-checked'</span>);
+    
+    <span class="keyword">const</span> layoutMode = btn.getAttribute(<span class="string">'data-layout'</span>);
+    <span class="keyword">const</span> options = { layoutMode: layoutMode };
+    
+    <span class="comment">// 为不同布局模式设置特定参数</span>
+    <span class="keyword">if</span> (layoutMode === <span class="string">'cellsByRow'</span>) {
+      options.cellsByRow = { columnWidth: 200, rowHeight: 200 };
+    }
+    
+    grid4.arrange(options);
+  });
+});</code></pre>
+      </div>
+    </section>
+
+    <!-- 示例 5: 动态操作 -->
+    <section id="demo5" class="demo-section">
+      <h2 class="demo-title">➕ 动态添加/删除项目</h2>
+      <p class="demo-description">
+        实时添加新项目到网格，或点击项目删除它。Isotope 会自动重新排列剩余项目，并带动画效果。
+      </p>
+
+      <div class="controls">
+        <div class="button-group">
+          <h4>操作</h4>
+          <button id="addItems">➕ 添加 3 个项目</button>
+          <button id="removeRandom">➖ 随机删除 1 个</button>
+          <button id="clearAll">🗑️ 清空全部</button>
+        </div>
+        <div class="button-group">
+          <h4>提示</h4>
+          <p style="padding: 10px; color: #666;">点击任意项目也可删除它</p>
+        </div>
+      </div>
+
+      <div class="grid" id="grid5">
+        <div class="grid-item">
+          <div class="grid-item-content item-red">
+            <h3>项目 1</h3>
+            <p>点击删除</p>
+          </div>
+        </div>
+        <div class="grid-item">
+          <div class="grid-item-content item-blue">
+            <h3>项目 2</h3>
+            <p>点击删除</p>
+          </div>
+        </div>
+        <div class="grid-item">
+          <div class="grid-item-content item-green">
+            <h3>项目 3</h3>
+            <p>点击删除</p>
+          </div>
+        </div>
+        <div class="grid-item">
+          <div class="grid-item-content item-yellow">
+            <h3>项目 4</h3>
+            <p>点击删除</p>
+          </div>
+        </div>
+        <div class="grid-item">
+          <div class="grid-item-content item-purple">
+            <h3>项目 5</h3>
+            <p>点击删除</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="code-block">
+        <pre><code><span class="comment">// 添加项目</span>
+<span class="keyword">const</span> addItemsBtn = document.getElementById(<span class="string">'addItems'</span>);
+addItemsBtn.addEventListener(<span class="string">'click'</span>, () => {
+  <span class="keyword">const</span> items = [];
+  <span class="keyword">const</span> colors = [<span class="string">'item-red'</span>, <span class="string">'item-blue'</span>, <span class="string">'item-green'</span>, <span class="string">'item-yellow'</span>, <span class="string">'item-purple'</span>];
+  
+  <span class="keyword">for</span> (<span class="keyword">let</span> i = 0; i < 3; i++) {
+    <span class="keyword">const</span> item = document.createElement(<span class="string">'div'</span>);
+    item.className = <span class="string">'grid-item'</span>;
+    <span class="keyword">const</span> color = colors[Math.floor(Math.random() * colors.length)];
+    item.innerHTML = `
+      <div class="grid-item-content ${color}">
+        <h3>新项目</h3>
+        <p>动态添加</p>
+      </div>
+    `;
+    items.push(item);
+  }
+  
+  grid5.append(...items);
+  grid5.isotope(<span class="string">'appended'</span>, items);
+});
+
+<span class="comment">// 删除项目</span>
+grid5.addEventListener(<span class="string">'click'</span>, (e) => {
+  <span class="keyword">const</span> item = e.target.closest(<span class="string">'.grid-item'</span>);
+  <span class="keyword">if</span> (item) {
+    grid5.isotope(<span class="string">'remove'</span>, item);
+    grid5.isotope(<span class="string">'layout'</span>);
+  }
+});</code></pre>
+      </div>
+    </section>
+
+    <!-- 示例 6: URL Hash 过滤 -->
+    <section id="demo6" class="demo-section">
+      <h2 class="demo-title">🔗 URL Hash 过滤与响应式</h2>
+      <p class="demo-description">
+        过滤状态同步到 URL，支持浏览器前进/后退和分享链接。完美响应式适配，移动端自动调整列数。
+      </p>
+
+      <div class="controls">
+        <div class="button-group">
+          <h4>筛选（会更新 URL）</h4>
+          <button data-filter="*" class="is-checked">全部</button>
+          <button data-filter=".design">设计</button>
+          <button data-filter=".development">开发</button>
+          <button data-filter=".marketing">营销</button>
+        </div>
+      </div>
+
+      <div class="grid" id="grid6">
+        <div class="grid-item design">
+          <div class="grid-item-content item-red">
+            <h3>UI 设计</h3>
+            <p>类别：设计</p>
+          </div>
+        </div>
+        <div class="grid-item development">
+          <div class="grid-item-content item-blue">
+            <h3>前端开发</h3>
+            <p>类别：开发</p>
+          </div>
+        </div>
+        <div class="grid-item marketing">
+          <div class="grid-item-content item-green">
+            <h3>数字营销</h3>
+            <p>类别：营销</p>
+          </div>
+        </div>
+        <div class="grid-item design">
+          <div class="grid-item-content item-yellow">
+            <h3>UX 研究</h3>
+            <p>类别：设计</p>
+          </div>
+        </div>
+        <div class="grid-item development">
+          <div class="grid-item-content item-purple">
+            <h3>后端开发</h3>
+            <p>类别：开发</p>
+          </div>
+        </div>
+        <div class="grid-item marketing">
+          <div class="grid-item-content item-orange">
+            <h3>内容策略</h3>
+            <p>类别：营销</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="code-block">
+        <pre><code><span class="comment">// 从 URL Hash 获取过滤条件</span>
+<span class="keyword">function</span> getHashFilter() {
+  <span class="keyword">const</span> matches = location.hash.match(<span class="string">/filter=([^&]+)/i</span>);
+  <span class="keyword">return</span> matches && decodeURIComponent(matches[1]);
+}
+
+<span class="comment">// 初始化时应用 Hash 过滤</span>
+<span class="keyword">function</span> initFromHash() {
+  <span class="keyword">const</span> hashFilter = getHashFilter();
+  <span class="keyword">if</span> (hashFilter) {
+    grid6.arrange({ filter: hashFilter });
+    updateButtons(hashFilter);
+  }
+}
+
+<span class="comment">// Hash 变化时更新过滤</span>
+window.addEventListener(<span class="string">'hashchange'</span>, () => {
+  <span class="keyword">const</span> hashFilter = getHashFilter();
+  <span class="keyword">if</span> (hashFilter) {
+    grid6.arrange({ filter: hashFilter });
+    updateButtons(hashFilter);
+  }
+});
+
+<span class="comment">// 点击按钮更新 Hash</span>
+filterButtons.forEach(btn => {
+  btn.addEventListener(<span class="string">'click'</span>, () => {
+    <span class="keyword">const</span> filterValue = btn.getAttribute(<span class="string">'data-filter'</span>);
+    location.hash = <span class="string">'filter='</span> + encodeURIComponent(filterValue);
+  });
+});
+
+initFromHash();</code></pre>
+      </div>
+    </section>
+  </div>
+
+  <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
+  <script>
+    // 标签页切换
+    const navTabs = document.querySelectorAll('.nav-tab');
+    const demoSections = document.querySelectorAll('.demo-section');
+
+    navTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        navTabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        
+        const target = tab.getAttribute('data-tab');
+        demoSections.forEach(section => {
+          section.classList.toggle('active', section.id === target);
+        });
+      });
+    });
+
+    // 示例 1: 基础过滤
+    const grid1 = new Isotope('#grid1', {
+      itemSelector: '.grid-item',
+      layoutMode: 'masonry'
+    });
+
+    const filterButtons1 = document.querySelectorAll('#demo1 .button-group button');
+    filterButtons1.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterButtons1.forEach(b => b.classList.remove('is-checked'));
+        btn.classList.add('is-checked');
+        grid1.arrange({ filter: btn.getAttribute('data-filter') });
+      });
+    });
+
+    // 示例 2: 排序功能
+    const grid2 = new Isotope('#grid2', {
+      itemSelector: '.grid-item',
+      layoutMode: 'fitRows',
+      getSortData: {
+        name: '.name',
+        number: '[data-number] parseInt',
+        category: '[data-category]'
+      }
+    });
+
+    let sortAscending = true;
+    const sortByButtons = document.querySelectorAll('#demo2 .button-group:first-child button');
+    const sortAscButtons = document.querySelectorAll('#demo2 .button-group:last-child button');
+
+    sortByButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        sortByButtons.forEach(b => b.classList.remove('is-checked'));
+        btn.classList.add('is-checked');
+        grid2.arrange({ 
+          sortBy: btn.getAttribute('data-sort-by'),
+          sortAscending: sortAscending
+        });
+      });
+    });
+
+    sortAscButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        sortAscButtons.forEach(b => b.classList.remove('is-checked'));
+        btn.classList.add('is-checked');
+        sortAscending = btn.getAttribute('data-sort-asc') === 'true';
+        const currentSortBy = document.querySelector('#demo2 .button-group:first-child .is-checked').getAttribute('data-sort-by');
+        grid2.arrange({ sortBy: currentSortBy, sortAscending: sortAscending });
+      });
+    });
+
+    // 示例 3: 组合过滤
+    const grid3 = new Isotope('#grid3', {
+      itemSelector: '.grid-item',
+      layoutMode: 'masonry'
+    });
+
+    const filters = {};
+    const buttonGroups = document.querySelectorAll('#demo3 .button-group');
+
+    buttonGroups.forEach(group => {
+      const filterGroup = group.getAttribute('data-filter-group');
+      const buttons = group.querySelectorAll('button');
+      
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          buttons.forEach(b => b.classList.remove('is-checked'));
+          btn.classList.add('is-checked');
+          
+          filters[filterGroup] = btn.getAttribute('data-filter');
+          const filterValue = Object.values(filters).filter(v => v).join('');
+          grid3.arrange({ filter: filterValue || '*' });
+        });
+      });
+    });
+
+    // 示例 4: 布局模式
+    const grid4 = new Isotope('#grid4', {
+      itemSelector: '.grid-item',
+      layoutMode: 'masonry'
+    });
+
+    const layoutButtons = document.querySelectorAll('#demo4 .button-group button');
+    layoutButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        layoutButtons.forEach(b => b.classList.remove('is-checked'));
+        btn.classList.add('is-checked');
+        
+        const layoutMode = btn.getAttribute('data-layout');
+        const options = { layoutMode: layoutMode };
+        
+        if (layoutMode === 'cellsByRow') {
+          options.cellsByRow = { columnWidth: 200, rowHeight: 200 };
+        }
+        
+        grid4.arrange(options);
+      });
+    });
+
+    // 示例 5: 动态操作
+    const grid5 = new Isotope('#grid5', {
+      itemSelector: '.grid-item',
+      layoutMode: 'masonry'
+    });
+
+    const colors = ['item-red', 'item-blue', 'item-green', 'item-yellow', 'item-purple'];
+    let itemCount = 5;
+
+    document.getElementById('addItems').addEventListener('click', () => {
+      const items = [];
+      for (let i = 0; i < 3; i++) {
+        const item = document.createElement('div');
+        item.className = 'grid-item';
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        item.innerHTML = `
+          <div class="grid-item-content ${color}">
+            <h3>新项目 ${++itemCount}</h3>
+            <p>动态添加</p>
+          </div>
+        `;
+        items.push(item);
+      }
+      grid5.append(...items);
+      grid5.isotope('appended', items);
+    });
+
+    document.getElementById('removeRandom').addEventListener('click', () => {
+      const items = grid5.querySelectorAll('.grid-item');
+      if (items.length > 0) {
+        const randomItem = items[Math.floor(Math.random() * items.length)];
+        grid5.isotope('remove', randomItem);
+        grid5.isotope('layout');
+      }
+    });
+
+    document.getElementById('clearAll').addEventListener('click', () => {
+      const items = grid5.querySelectorAll('.grid-item');
+      items.forEach(item => {
+        grid5.isotope('remove', item);
+      });
+      grid5.isotope('layout');
+      itemCount = 0;
+    });
+
+    grid5.addEventListener('click', (e) => {
+      const item = e.target.closest('.grid-item');
+      if (item) {
+        grid5.isotope('remove', item);
+        grid5.isotope('layout');
+      }
+    });
+
+    // 示例 6: URL Hash 过滤
+    const grid6 = new Isotope('#grid6', {
+      itemSelector: '.grid-item',
+      layoutMode: 'masonry'
+    });
+
+    function getHashFilter() {
+      const matches = location.hash.match(/filter=([^&]+)/i);
+      return matches && decodeURIComponent(matches[1]);
+    }
+
+    function updateButtons(filterValue) {
+      const buttons = document.querySelectorAll('#demo6 .button-group button');
+      buttons.forEach(btn => {
+        btn.classList.toggle('is-checked', btn.getAttribute('data-filter') === filterValue);
+      });
+    }
+
+    function initFromHash() {
+      const hashFilter = getHashFilter();
+      if (hashFilter) {
+        grid6.arrange({ filter: hashFilter });
+        updateButtons(hashFilter);
+      }
+    }
+
+    window.addEventListener('hashchange', () => {
+      const hashFilter = getHashFilter();
+      if (hashFilter) {
+        grid6.arrange({ filter: hashFilter });
+        updateButtons(hashFilter);
+      }
+    });
+
+    const filterButtons6 = document.querySelectorAll('#demo6 .button-group button');
+    filterButtons6.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const filterValue = btn.getAttribute('data-filter');
+        location.hash = 'filter=' + encodeURIComponent(filterValue);
+      });
+    });
+
+    initFromHash();
+  </script>
+</body>
+</html>

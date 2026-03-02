@@ -127,6 +127,43 @@ function HomePage() {
 				<div className='ink-divider mb-8' />
 
 				<div ref={cardsRef} className='space-y-10'>
+					{/* 外部演示链接卡片 */}
+					<section>
+						<div className='flex items-center gap-3 mb-5'>
+							<h2 className='text-lg font-display font-semibold text-ink-deep'>外部演示</h2>
+							<span className='text-xs text-ink-light px-2 py-0.5 bg-ink-pale/50 rounded-full'>
+								完整功能展示
+							</span>
+						</div>
+						<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5'>
+							<div
+								onClick={() => window.open('/isotope-demo/index.html', '_blank')}
+								className='component-card ink-card p-5 cursor-pointer group border-2 border-zhusha/20 hover:border-zhusha/40'>
+								<div className='flex items-start justify-between mb-2'>
+									<h3 className='text-base font-display font-semibold text-ink-deep group-hover:text-zhusha transition-colors duration-200'>
+										🎨 Isotope 完整演示
+									</h3>
+									<span className='text-xs px-2 py-0.5 rounded-full border bg-zhusha/5 text-zhusha border-zhusha/20'>
+										外部链接
+									</span>
+								</div>
+								<p className='text-sm text-ink-medium leading-relaxed mb-3'>
+									包含 6 个完整示例：基础过滤、排序功能、组合过滤、布局模式、动态操作、URL Hash 过滤
+								</p>
+								<div className='flex items-center gap-2 text-link text-sm group-hover:text-link-hover transition-colors duration-200'>
+									<span>在新窗口打开</span>
+									<svg
+										className='w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-200'
+										fill='none'
+										stroke='currentColor'
+										viewBox='0 0 24 24'>
+										<path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14' />
+									</svg>
+								</div>
+							</div>
+						</div>
+					</section>
+
 					{Object.entries(groupedEntries).map(([category, entries]) => (
 						<section key={category}>
 							<div className='flex items-center gap-3 mb-5'>

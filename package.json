@@ -12,6 +12,7 @@
     "screenshot:preview": "node tools/screenshot/index.mjs"
   },
   "dependencies": {
+    "isotope-layout": "^3.0.6",
     "lucide-react": "^0.563.0",
     "pts": "^0.12.9",
     "react": "^19.0.0",
