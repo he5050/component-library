@@ -7,6 +7,35 @@ import { fadeInStagger, cardEnter, rippleEffect } from "../utils/animations"
 
 type CategoryType = "全部" | "示例演示" | "高阶组件"
 
+// 外部演示链接配置
+const externalDemos: PreviewEntry[] = [
+	{
+		id: "isotope-full-demo",
+		name: "🎨 Isotope 完整演示",
+		description: "包含 6 个完整示例：基础过滤、排序功能、组合过滤、布局模式、动态操作、URL Hash 过滤",
+		category: "示例演示",
+		layer: "base",
+		kind: "demo",
+		sourcePath: "external",
+		component: () => null,
+		externalUrl: "/isotope-demo/index.html",
+	},
+	{
+		id: "scrollmagic-full-demo",
+		name: "🎭 ScrollMagic 完整演示",
+		description: "包含 6 个完整示例：文字飞入、图片淡入、视差滚动、固定元素、序列动画、颜色变化",
+		category: "示例演示",
+		layer: "base",
+		kind: "demo",
+		sourcePath: "external",
+		component: () => null,
+		externalUrl: "/scrollmagic-demo/index.html",
+	},
+]
+
+// 扩展 PreviewEntry 类型
+type ExtendedPreviewEntry = PreviewEntry & { externalUrl?: string }
+
 function HomePage() {
 	const location = useLocation()
 	const navigate = useNavigate()
@@ -20,6 +49,8 @@ function HomePage() {
 	const category = params.get("category") || ""
 
 	const allEntries = listHomepageEntries()
+	// 合并外部演示
+	const allEntriesWithExternal: ExtendedPreviewEntry[] = [...externalDemos, ...allEntries]
 	const categories: CategoryType[] = ["全部", "示例演示", "高阶组件"]
 
 	useEffect(() => {
@@ -38,7 +69,7 @@ function HomePage() {
 		}
 	}, [selectedCategory])
 
-	const filteredEntries = allEntries.filter((entry) => {
+	const filteredEntries = allEntriesWithExternal.filter((entry) => {
 		const matchesSearch =
 			entry.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
 			entry.description.toLowerCase().includes(searchQuery.toLowerCase())
@@ -55,7 +86,7 @@ function HomePage() {
 			acc[cat].push(entry)
 			return acc
 		},
-		{} as Record<string, PreviewEntry[]>,
+		{} as Record<string, ExtendedPreviewEntry[]>,
 	)
 
 	const handleSearch = (value: string) => {
@@ -80,13 +111,19 @@ function HomePage() {
 		navigate({ search: params.toString() }, { replace: true })
 	}
 
-	const handleCardClick = (e: React.MouseEvent<HTMLDivElement>, componentId: string) => {
+	const handleCardClick = (e: React.MouseEvent<HTMLDivElement>, entry: ExtendedPreviewEntry) => {
+		if (entry.externalUrl) {
+			// 外部链接
+			window.open(entry.externalUrl, "_blank")
+			return
+		}
+
 		const rect = e.currentTarget.getBoundingClientRect()
 		const x = e.clientX - rect.left
 		const y = e.clientY - rect.top
 		rippleEffect(e.currentTarget, x, y)
 		setTimeout(() => {
-			navigate(`/preview/${componentId}`)
+			navigate(`/preview/${entry.id}`)
 		}, 150)
 	}
 
@@ -127,68 +164,6 @@ function HomePage() {
 				<div className='ink-divider mb-8' />
 
 				<div ref={cardsRef} className='space-y-10'>
-					{/* 外部演示链接卡片 */}
-					<section>
-						<div className='flex items-center gap-3 mb-5'>
-							<h2 className='text-lg font-display font-semibold text-ink-deep'>外部演示</h2>
-							<span className='text-xs text-ink-light px-2 py-0.5 bg-ink-pale/50 rounded-full'>
-								完整功能展示
-							</span>
-						</div>
-						<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5'>
-							<div
-								onClick={() => window.open('/isotope-demo/index.html', '_blank')}
-								className='component-card ink-card p-5 cursor-pointer group border-2 border-zhusha/20 hover:border-zhusha/40'>
-								<div className='flex items-start justify-between mb-2'>
-									<h3 className='text-base font-display font-semibold text-ink-deep group-hover:text-zhusha transition-colors duration-200'>
-										🎨 Isotope 完整演示
-									</h3>
-									<span className='text-xs px-2 py-0.5 rounded-full border bg-zhusha/5 text-zhusha border-zhusha/20'>
-										外部链接
-									</span>
-								</div>
-								<p className='text-sm text-ink-medium leading-relaxed mb-3'>
-									包含 6 个完整示例：基础过滤、排序功能、组合过滤、布局模式、动态操作、URL Hash 过滤
-								</p>
-								<div className='flex items-center gap-2 text-link text-sm group-hover:text-link-hover transition-colors duration-200'>
-									<span>在新窗口打开</span>
-									<svg
-										className='w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-200'
-										fill='none'
-										stroke='currentColor'
-										viewBox='0 0 24 24'>
-										<path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14' />
-									</svg>
-								</div>
-							</div>
-							<div
-								onClick={() => window.open('/scrollmagic-demo/index.html', '_blank')}
-								className='component-card ink-card p-5 cursor-pointer group border-2 border-zhusha/20 hover:border-zhusha/40'>
-								<div className='flex items-start justify-between mb-2'>
-									<h3 className='text-base font-display font-semibold text-ink-deep group-hover:text-zhusha transition-colors duration-200'>
-										🎭 ScrollMagic 完整演示
-									</h3>
-									<span className='text-xs px-2 py-0.5 rounded-full border bg-zhusha/5 text-zhusha border-zhusha/20'>
-										外部链接
-									</span>
-								</div>
-								<p className='text-sm text-ink-medium leading-relaxed mb-3'>
-									包含 6 个完整示例：文字飞入、图片淡入、视差滚动、固定元素、序列动画、颜色变化
-								</p>
-								<div className='flex items-center gap-2 text-link text-sm group-hover:text-link-hover transition-colors duration-200'>
-									<span>在新窗口打开</span>
-									<svg
-										className='w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-200'
-										fill='none'
-										stroke='currentColor'
-										viewBox='0 0 24 24'>
-										<path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14' />
-									</svg>
-								</div>
-							</div>
-						</div>
-					</section>
-
 					{Object.entries(groupedEntries).map(([category, entries]) => (
 						<section key={category}>
 							<div className='flex items-center gap-3 mb-5'>
@@ -201,34 +176,48 @@ function HomePage() {
 								{entries.map((entry) => (
 									<div
 										key={entry.id}
-										onClick={(e) => handleCardClick(e, entry.id)}
-										className='component-card ink-card p-5 cursor-pointer group'>
+										onClick={(e) => handleCardClick(e, entry)}
+										className={`component-card ink-card p-5 cursor-pointer group ${
+											entry.externalUrl ? "border-2 border-zhusha/20 hover:border-zhusha/40" : ""
+										}`}>
 										<div className='flex items-start justify-between mb-2'>
 											<h3 className='text-base font-display font-semibold text-ink-deep group-hover:text-zhusha transition-colors duration-200'>
 												{entry.name}
 											</h3>
 											<span
 												className={`
-                        text-xs px-2 py-0.5 rounded-full border
-                        ${
-													entry.category === "高阶组件"
-														? "bg-dian/5 text-dian border-dian/20"
-														: "bg-zhusha/5 text-zhusha border-zhusha/20"
-												}
-                      `}>
-												{entry.category === "高阶组件" ? "高阶" : "Demo"}
+													text-xs px-2 py-0.5 rounded-full border
+													${
+														entry.category === "高阶组件"
+															? "bg-dian/5 text-dian border-dian/20"
+															: entry.externalUrl
+																? "bg-zhusha/5 text-zhusha border-zhusha/20"
+																: "bg-zhusha/5 text-zhusha border-zhusha/20"
+													}
+												`}>
+												{entry.category === "高阶组件" ? "高阶" : entry.externalUrl ? "外部" : "Demo"}
 											</span>
 										</div>
 										<p className='text-sm text-ink-medium leading-relaxed mb-3'>{entry.description}</p>
 										<div className='flex items-center gap-2 text-link text-sm group-hover:text-link-hover transition-colors duration-200'>
-											<span>查看详情</span>
-											<svg
-												className='w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-200'
-												fill='none'
-												stroke='currentColor'
-												viewBox='0 0 24 24'>
-												<path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 5l7 7-7 7' />
-											</svg>
+											<span>{entry.externalUrl ? "在新窗口打开" : "查看详情"}</span>
+											{entry.externalUrl ? (
+												<svg
+													className='w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-200'
+													fill='none'
+													stroke='currentColor'
+													viewBox='0 0 24 24'>
+													<path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14' />
+												</svg>
+											) : (
+												<svg
+													className='w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-200'
+													fill='none'
+													stroke='currentColor'
+													viewBox='0 0 24 24'>
+													<path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 5l7 7-7 7' />
+												</svg>
+											)}
 										</div>
 									</div>
 								))}

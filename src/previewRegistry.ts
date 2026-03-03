@@ -55,6 +55,12 @@ const componentMetadata: Record<string, ComponentMetadata> = {
 		category: "示例演示",
 		layer: "base",
 	},
+	HighwayDemo: {
+		name: "Highway.js 页面过渡",
+		description: "现代化的页面路由和过渡动画库，提供流畅的页面切换体验",
+		category: "示例演示",
+		layer: "base",
+	},
 	AnimationDemo: { name: "动画库演示", description: "水墨风格动画库演示", category: "高阶组件", layer: "advanced" },
 }
 
