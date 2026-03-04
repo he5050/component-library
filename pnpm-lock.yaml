@@ -11,6 +11,9 @@ importers:
       '@types/scrollmagic':
         specifier: ^2.0.8
         version: 2.0.8
+      dynamics.js:
+        specifier: ^1.1.5
+        version: 1.1.5
       isotope-layout:
         specifier: ^3.0.6
         version: 3.0.6
@@ -1029,6 +1032,9 @@ packages:
 
   duplexer@0.1.2:
     resolution: {integrity: sha512-jtD6YG370ZCIi/9GTaJKQxWTZD045+4R4hTk/x1UyoqadyJ9x9CgSi1RlVDQF8U2sxLLSnFkCaMihqljHIWgMg==}
+
+  dynamics.js@1.1.5:
+    resolution: {integrity: sha512-c+LHNccaJS67T4Jfk9b/5CwYsZCHmc10+MplWB8WPFyqTMEqOf8MI56Rg0JRILWjtXnjuBO7xmrNevNnPX+NHg==}
 
   electron-to-chromium@1.5.302:
     resolution: {integrity: sha512-sM6HAN2LyK82IyPBpznDRqlTQAtuSaO+ShzFiWTvoMJLHyZ+Y39r8VMfHzwbU8MVBzQ4Wdn85+wlZl2TLGIlwg==}
@@ -2413,6 +2419,8 @@ snapshots:
     optional: true
 
   duplexer@0.1.2: {}
+
+  dynamics.js@1.1.5: {}
 
   electron-to-chromium@1.5.302: {}
 
