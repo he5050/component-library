@@ -49,6 +49,12 @@ const componentMetadata: Record<string, ComponentMetadata> = {
 		category: "示例演示",
 		layer: "base",
 	},
+	GranimDemo: {
+		name: "Granim.js",
+		description: "渐变动画从未如此绚丽的色彩魔法师",
+		category: "示例演示",
+		layer: "base",
+	},
 	IsotopeDemo: {
 		name: "Isotope 网格布局",
 		description: "智能动态网格布局系统，支持过滤、排序和动画",

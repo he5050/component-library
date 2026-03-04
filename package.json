@@ -14,6 +14,7 @@
   "dependencies": {
     "@types/scrollmagic": "^2.0.8",
     "dynamics.js": "^1.1.5",
+    "granim": "^2.0.0",
     "isotope-layout": "^3.0.6",
     "lucide-react": "^0.563.0",
     "pts": "^0.12.9",
