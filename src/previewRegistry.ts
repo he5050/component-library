@@ -43,18 +43,9 @@ const componentMetadata: Record<string, ComponentMetadata> = {
 	Tabs: { name: "Tabs 标签页", description: "标签页切换组件", category: "基础组件", layer: "base" },
 	LucideDemo: { name: "图标演示", description: "Lucide 图标库演示", category: "示例演示", layer: "base" },
 	PtsDemo: { name: "Pts.js", description: "数学运算的艺术化表达工具库", category: "高阶组件", layer: "advanced" },
-	DynamicsDemo: {
-		name: "Dynamics.js",
-		description: "基于物理原理的 JavaScript 动画库",
-		category: "示例演示",
-		layer: "base",
-	},
-	GranimDemo: {
-		name: "Granim.js",
-		description: "渐变动画从未如此绚丽的色彩魔法师",
-		category: "示例演示",
-		layer: "base",
-	},
+	DynamicsDemo: { name: "Dynamics.js", description: "基于物理原理的 JavaScript 动画库", category: "示例演示", layer: "base" },
+	GranimDemo: { name: "Granim.js", description: "渐变动画从未如此绚丽的色彩魔法师", category: "示例演示", layer: "base" },
+	ParallaxDemo: { name: "Parallax.js", description: "让背景视差如梦似幻的梦想家", category: "示例演示", layer: "base" },
 	IsotopeDemo: {
 		name: "Isotope 网格布局",
 		description: "智能动态网格布局系统，支持过滤、排序和动画",
@@ -203,7 +194,10 @@ for (const [name, { path, exports, layer }] of demoModules) {
 		layer: layer,
 	}
 
+	console.log("[demoModules] Processing:", name, "has default:", !!exports.default, "meta:", meta)
+
 	if (isComponentLike(exports.default)) {
+		console.log("[demoModules] Registering:", name)
 		registerEntry(name, {
 			id: name,
 			component: exports.default,
@@ -214,8 +208,14 @@ for (const [name, { path, exports, layer }] of demoModules) {
 			description: meta.description,
 			category: meta.category,
 		})
+	} else {
+		console.warn("[demoModules] No default export for:", name, "exports keys:", Object.keys(exports))
 	}
 }
+
+console.log("[previewRegistry] demoModules keys:", [...demoModules.keys()])
+console.log("[previewRegistry] componentMetadata keys:", Object.keys(componentMetadata))
+console.log("[previewRegistry] registry keys:", [...registry.keys()])
 
 if (conflicts.length > 0) {
 	console.warn("[previewRegistry] duplicate preview names detected:", conflicts)

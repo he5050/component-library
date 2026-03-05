@@ -238,7 +238,7 @@ export default defineConfig({
     "ink-subtitle": "font-display font-semibold text-ink-thick",
     "ink-body": "font-body text-ink-thick leading-relaxed",
     "ink-caption": "font-display text-sm text-ink-medium italic",
-    "ink-vertical": "writing-mode-vertical-rl text-orientation-mixed tracking-widest",
+    "ink-vertical": "[writing-mode:vertical-rl] tracking-widest [text-orientation:mixed]",
 
     // ==================== 交互效果 ====================
     "shadow-ink-hover": "hover:shadow-ink-hover hover:-translate-y-0.5",
