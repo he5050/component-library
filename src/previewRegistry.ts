@@ -89,6 +89,18 @@ const componentMetadata: Record<string, ComponentMetadata> = {
 		category: "高阶组件",
 		layer: "advanced",
 	},
+	BounceDemo: {
+		name: "Bounce.js 弹跳动画",
+		description: "让元素跳跃起舞的舞蹈导演",
+		category: "示例演示",
+		layer: "base",
+	},
+	WaypointsDemo: {
+		name: "Waypoints.js 滚动触发",
+		description: "精准控制滚动节奏的指挥官",
+		category: "示例演示",
+		layer: "base",
+	},
 	AnimationDemo: { name: "动画库演示", description: "水墨风格动画库演示", category: "高阶组件", layer: "advanced" },
 }
 
