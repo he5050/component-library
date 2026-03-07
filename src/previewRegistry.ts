@@ -101,6 +101,24 @@ const componentMetadata: Record<string, ComponentMetadata> = {
 		category: "示例演示",
 		layer: "base",
 	},
+	LetteringDemo: {
+		name: "Lettering.js 文字排版",
+		description: "玩转文字排版的造字大师",
+		category: "示例演示",
+		layer: "base",
+	},
+	MojsDemo: {
+		name: "Mo.js 动画",
+		description: "动画效果炸裂的爆炸艺术家",
+		category: "示例演示",
+		layer: "base",
+	},
+	PaperDemo: {
+		name: "Paper.js 矢量绘图",
+		description: "把矢量画稿变成灵动生命的插画师",
+		category: "示例演示",
+		layer: "base",
+	},
 	AnimationDemo: { name: "动画库演示", description: "水墨风格动画库演示", category: "高阶组件", layer: "advanced" },
 }
 
