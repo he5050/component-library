@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect, useRef } from "react"
 import Button from "../../components/base/Button"
+import { useDemoRuntime } from "./hooks/useDemoRuntime"
 
 interface HighwayDemoProps {}
 
@@ -32,12 +33,35 @@ const HighwayDemo: React.FC<HighwayDemoProps> = () => {
 	const [isExiting, setIsExiting] = useState(false)
 	const [isAutoPlaying, setIsAutoPlaying] = useState(false)
 	const contentRef = useRef<HTMLDivElement>(null)
-	const autoPlayRef = useRef<number>()
 	const touchStartX = useRef(0)
+	const autoRunIdRef = useRef<number | null>(null)
+	const transitionTimerRefs = useRef<ReturnType<typeof setTimeout>[]>([])
+	const {
+		isRunActive,
+		beginRun,
+		stopRun,
+		setRunTimer,
+	} = useDemoRuntime()
 
 	// 页面索引
 	const pageKeys: PageType[] = ["home", "about", "work", "contact"]
 	const currentIndex = pageKeys.indexOf(currentPage)
+
+	/** 记录页面切换中的短时定时器，便于统一清理。 */
+	const setTransitionTimer = useCallback((callback: () => void, delay: number) => {
+		const timer = window.setTimeout(() => {
+			transitionTimerRefs.current = transitionTimerRefs.current.filter((id) => id !== timer)
+			callback()
+		}, delay)
+		transitionTimerRefs.current.push(timer)
+		return timer
+	}, [])
+
+	/** 清理页面切换相关定时器。 */
+	const clearTransitionTimers = useCallback(() => {
+		transitionTimerRefs.current.forEach((timer) => clearTimeout(timer))
+		transitionTimerRefs.current = []
+	}, [])
 
 	// 页面切换
 	const navigateTo = useCallback((page: PageType, dir: "next" | "prev" = "next") => {
@@ -48,15 +72,15 @@ const HighwayDemo: React.FC<HighwayDemoProps> = () => {
 		setDirection(dir)
 
 		// 退出动画
-		setTimeout(() => {
+		setTransitionTimer(() => {
 			setCurrentPage(page)
 			setIsExiting(false)
 			// 进入动画
-			setTimeout(() => {
+			setTransitionTimer(() => {
 				setIsTransitioning(false)
 			}, 50)
 		}, 380)
-	}, [currentPage, isTransitioning])
+	}, [currentPage, isTransitioning, setTransitionTimer])
 
 	// 获取下一个页面
 	const getNextPage = useCallback((): PageType => {
@@ -70,27 +94,36 @@ const HighwayDemo: React.FC<HighwayDemoProps> = () => {
 		return pageKeys[(currentIndex - 1 + pageKeys.length) % pageKeys.length]
 	}, [currentPage])
 
+	const stopAutoDemo = useCallback(() => {
+		const runId = autoRunIdRef.current
+		autoRunIdRef.current = null
+		if (runId !== null && isRunActive(runId)) {
+			stopRun()
+		}
+		setIsAutoPlaying(false)
+	}, [isRunActive, stopRun])
+
 	// 自动演示
 	const startAutoDemo = useCallback(() => {
 		if (isAutoPlaying) {
 			stopAutoDemo()
 			return
 		}
-		setIsAutoPlaying(true)
-		const run = () => {
-			const next = getNextPage()
-			navigateTo(next, "next")
-			autoPlayRef.current = window.setTimeout(run, 3000)
-		}
-		autoPlayRef.current = window.setTimeout(run, 3000)
-	}, [getNextPage, navigateTo, isAutoPlaying])
 
-	const stopAutoDemo = useCallback(() => {
-		if (autoPlayRef.current) {
-			clearTimeout(autoPlayRef.current)
+		const runId = beginRun()
+		autoRunIdRef.current = runId
+		setIsAutoPlaying(true)
+
+		let current = pageKeys.indexOf(currentPage)
+		const run = () => {
+			if (!isRunActive(runId)) return
+			current = (current + 1) % pageKeys.length
+			navigateTo(pageKeys[current], "next")
+			setRunTimer(runId, run, 3000)
 		}
-		setIsAutoPlaying(false)
-	}, [])
+
+		setRunTimer(runId, run, 3000)
+	}, [isAutoPlaying, stopAutoDemo, beginRun, pageKeys, currentPage, isRunActive, navigateTo, setRunTimer])
 
 	// 键盘控制
 	useEffect(() => {
@@ -124,8 +157,11 @@ const HighwayDemo: React.FC<HighwayDemoProps> = () => {
 	}
 
 	useEffect(() => {
-		return () => stopAutoDemo()
-	}, [stopAutoDemo])
+		return () => {
+			stopAutoDemo()
+			clearTransitionTimers()
+		}
+	}, [stopAutoDemo, clearTransitionTimers])
 
 	// 获取过渡动画类名 - 增强版
 	const getTransitionClass = () => {

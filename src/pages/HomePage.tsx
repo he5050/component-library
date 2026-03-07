@@ -133,11 +133,11 @@ function HomePage() {
 				<header className='page-header mb-12'>
 					<div className='flex items-center gap-3 mb-4'>
 						<div className='w-2 h-8 bg-gradient-to-b from-zhusha to-zhusha/60 rounded-full' />
-						<span className='text-xs text-ink-medium tracking-[0.2em] uppercase font-display'>组件库</span>
+						<span className='text-xs text-ink-medium tracking-[0.2em] uppercase font-display'>演示</span>
 					</div>
-					<h1 className='text-4xl font-display font-bold text-ink-deep mb-3 tracking-wide'>水墨禅意组件</h1>
+					<h1 className='text-4xl font-display font-bold text-ink-deep mb-3 tracking-wide'>Demo</h1>
 					<p className='text-ink-medium text-lg max-w-2xl leading-relaxed'>
-						计白当黑，淡雅素净。以水墨美学构建现代组件系统。
+						计白当黑，淡雅素净。
 					</p>
 				</header>
 

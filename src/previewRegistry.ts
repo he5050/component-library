@@ -46,6 +46,7 @@ const componentMetadata: Record<string, ComponentMetadata> = {
 	DynamicsDemo: { name: "Dynamics.js", description: "基于物理原理的 JavaScript 动画库", category: "示例演示", layer: "base" },
 	GranimDemo: { name: "Granim.js", description: "渐变动画从未如此绚丽的色彩魔法师", category: "示例演示", layer: "base" },
 	ParallaxDemo: { name: "Parallax.js", description: "让背景视差如梦似幻的梦想家", category: "示例演示", layer: "base" },
+	MidnightDemo: { name: "Midnight.js", description: "让导航栏变色优雅到极致的调色师", category: "示例演示", layer: "base" },
 	IsotopeDemo: {
 		name: "Isotope 网格布局",
 		description: "智能动态网格布局系统，支持过滤、排序和动画",
@@ -63,6 +64,30 @@ const componentMetadata: Record<string, ComponentMetadata> = {
 		description: "现代化的页面路由和过渡动画库，提供流畅的页面切换体验",
 		category: "示例演示",
 		layer: "base",
+	},
+	AnimejsDemo: {
+		name: "Anime.js 动画",
+		description: "把 CSS 动画玩成艺术的魔法师",
+		category: "示例演示",
+		layer: "base",
+	},
+	VelocityDemo: {
+		name: "Velocity.js 动画",
+		description: "性能与美感完美平衡的动画引擎",
+		category: "示例演示",
+		layer: "base",
+	},
+	BarbaDemo: {
+		name: "Barba.js 页面过渡",
+		description: "轻量级页面过渡动画库，让页面切换流畅优雅",
+		category: "示例演示",
+		layer: "base",
+	},
+	BarbaGsapDemo: {
+		name: "Barba.js + GSAP",
+		description: "Barba.js 结合 GSAP 的高级页面过渡效果",
+		category: "高阶组件",
+		layer: "advanced",
 	},
 	AnimationDemo: { name: "动画库演示", description: "水墨风格动画库演示", category: "高阶组件", layer: "advanced" },
 }

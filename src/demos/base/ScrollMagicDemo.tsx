@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from "react"
 import Button from "../../components/base/Button"
+import { useDemoRuntime } from "./hooks/useDemoRuntime"
 
 interface ScrollMagicDemoProps {}
 
@@ -7,8 +8,13 @@ const ScrollMagicDemo: React.FC<ScrollMagicDemoProps> = () => {
 	const [activeSection, setActiveSection] = useState(0)
 	const [isAutoPlaying, setIsAutoPlaying] = useState(false)
 	const containerRef = useRef<HTMLDivElement>(null)
-	const isAutoPlayingRef = useRef(false)
-	const animationRef = useRef<number>()
+	const autoRunIdRef = useRef<number | null>(null)
+	const {
+		beginRun,
+		stopRun,
+		isRunActive,
+		setRunTimer,
+	} = useDemoRuntime()
 
 	const sections = [
 		{ id: 0, title: "首页", subtitle: "ScrollMagic" },
@@ -49,39 +55,47 @@ const ScrollMagicDemo: React.FC<ScrollMagicDemoProps> = () => {
 
 	// 自动演示
 	const startAutoDemo = useCallback(() => {
-		if (isAutoPlayingRef.current) return
-		isAutoPlayingRef.current = true
+		const currentRun = autoRunIdRef.current
+		if (currentRun !== null && isRunActive(currentRun)) return
+
+		const runId = beginRun()
+		autoRunIdRef.current = runId
 		setIsAutoPlaying(true)
 
 		let current = activeSection
 		
 		const next = () => {
-			if (!isAutoPlayingRef.current) return
+			if (!isRunActive(runId)) return
 			
 			current = (current + 1) % sections.length
 			scrollToSection(current)
 			
 			if (current === sections.length - 1) {
 				// 到达最后一页后停止
-				setTimeout(() => {
-					isAutoPlayingRef.current = false
+				setRunTimer(runId, () => {
+					if (!isRunActive(runId)) return
+					if (autoRunIdRef.current === runId) {
+						autoRunIdRef.current = null
+					}
 					setIsAutoPlaying(false)
+					stopRun()
 				}, 2000)
 			} else {
-				animationRef.current = window.setTimeout(next, 2500)
+				setRunTimer(runId, next, 2500)
 			}
 		}
 
-		animationRef.current = window.setTimeout(next, 2500)
-	}, [activeSection, scrollToSection, sections.length])
+		setRunTimer(runId, next, 2500)
+	}, [activeSection, scrollToSection, sections.length, beginRun, isRunActive, setRunTimer, stopRun])
 
 	const stopAutoDemo = useCallback(() => {
-		isAutoPlayingRef.current = false
-		setIsAutoPlaying(false)
-		if (animationRef.current) {
-			clearTimeout(animationRef.current)
+		const runId = autoRunIdRef.current
+		autoRunIdRef.current = null
+		if (runId !== null && isRunActive(runId)) {
+			stopRun()
 		}
-	}, [])
+		setIsAutoPlaying(false)
+	}, [isRunActive, stopRun])
 
 	useEffect(() => {
 		return () => stopAutoDemo()

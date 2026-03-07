@@ -12,9 +12,11 @@
     "screenshot:preview": "node tools/screenshot/index.mjs"
   },
   "dependencies": {
+    "@barba/core": "^2.10.3",
     "@types/scrollmagic": "^2.0.8",
     "dynamics.js": "^1.1.5",
     "granim": "^2.0.0",
+    "gsap": "^3.14.2",
     "isotope-layout": "^3.0.6",
     "lucide-react": "^0.563.0",
     "parallax-js": "^3.1.0",
@@ -22,7 +24,8 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.1.0",
-    "scrollmagic": "^2.0.9"
+    "scrollmagic": "^2.0.9",
+    "velocity-animate": "^2.0.6"
   },
   "devDependencies": {
     "@types/animejs": "^3.1.13",
