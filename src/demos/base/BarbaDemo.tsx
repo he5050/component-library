@@ -21,32 +21,32 @@ function BarbaDemo() {
 			title: "首页",
 			subtitle: "Home",
 			icon: "🏠",
-			color: "from-amber-50 to-orange-50",
-			borderColor: "border-amber-200",
+			color: "#faf8f5",
+			borderColor: "border-ink/10",
 			content: "欢迎来到首页，体验流畅的页面过渡效果",
 		},
 		about: {
 			title: "关于",
 			subtitle: "About",
 			icon: "📖",
-			color: "from-blue-50 to-cyan-50",
-			borderColor: "border-blue-200",
+			color: "#f5f0e8",
+			borderColor: "border-ink/10",
 			content: "了解我们的故事和使命",
 		},
 		work: {
 			title: "作品",
 			subtitle: "Work",
 			icon: "🎨",
-			color: "from-purple-50 to-pink-50",
-			borderColor: "border-purple-200",
+			color: "#faf8f5",
+			borderColor: "border-ink/10",
 			content: "探索我们精心打造的作品集",
 		},
 		contact: {
 			title: "联系",
 			subtitle: "Contact",
 			icon: "✉️",
-			color: "from-emerald-50 to-teal-50",
-			borderColor: "border-emerald-200",
+			color: "#f5f0e8",
+			borderColor: "border-ink/10",
 			content: "与我们取得联系，开始合作",
 		},
 	}
@@ -259,7 +259,8 @@ function BarbaDemo() {
 					{/* 页面内容 */}
 					<div
 						ref={contentRef}
-						className={`w-full h-full p-6 bg-gradient-to-br ${currentPageData.color} ${currentPageData.borderColor} border-2 rounded-xl`}
+						className={`w-full h-full p-6 ${currentPageData.borderColor} border-2 rounded-xl`}
+						style={{ background: currentPageData.color }}
 					>
 						<div className="flex flex-col h-full">
 							{/* 页面头部 */}

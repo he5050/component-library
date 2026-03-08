@@ -249,10 +249,7 @@ for (const [name, { path, exports, layer }] of demoModules) {
 		layer: layer,
 	}
 
-	console.log("[demoModules] Processing:", name, "has default:", !!exports.default, "meta:", meta)
-
 	if (isComponentLike(exports.default)) {
-		console.log("[demoModules] Registering:", name)
 		registerEntry(name, {
 			id: name,
 			component: exports.default,
@@ -263,14 +260,8 @@ for (const [name, { path, exports, layer }] of demoModules) {
 			description: meta.description,
 			category: meta.category,
 		})
-	} else {
-		console.warn("[demoModules] No default export for:", name, "exports keys:", Object.keys(exports))
 	}
 }
-
-console.log("[previewRegistry] demoModules keys:", [...demoModules.keys()])
-console.log("[previewRegistry] componentMetadata keys:", Object.keys(componentMetadata))
-console.log("[previewRegistry] registry keys:", [...registry.keys()])
 
 if (conflicts.length > 0) {
 	console.warn("[previewRegistry] duplicate preview names detected:", conflicts)

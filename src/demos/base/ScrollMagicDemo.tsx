@@ -243,7 +243,7 @@ const ScrollMagicDemo: React.FC<ScrollMagicDemoProps> = () => {
 				</section>
 
 				{/* Section 2: 文字飞入 - 国风 */}
-				<section className="sm-demo-section flex items-center justify-center bg-gradient-to-b from-purple-50/50 to-blue-50/50">
+				<section className="sm-demo-section flex items-center justify-center" style={{ background: 'linear-gradient(180deg, #faf8f5 50%, #f5f0e8 50%)' }}>
 					<div className="px-6 max-w-md">
 						<div className="mb-1 text-xs text-ink-light">01</div>
 						<h2 className="text-lg font-medium text-ink-deep mb-8">文字飞入动画</h2>
@@ -270,20 +270,21 @@ const ScrollMagicDemo: React.FC<ScrollMagicDemoProps> = () => {
 				</section>
 
 				{/* Section 3: 卡片层叠 - 国风 */}
-				<section className="sm-demo-section flex items-center justify-center bg-gradient-to-b from-rose-50/50 to-orange-50/50">
+				<section className="sm-demo-section flex items-center justify-center" style={{ background: 'linear-gradient(180deg, #f5f0e8 50%, #faf8f5 50%)' }}>
 					<div className="px-6">
 						<div className="mb-1 text-xs text-ink-light">02</div>
 						<h2 className="text-lg font-medium text-ink-deep mb-8">卡片层叠动画</h2>
 
 						<div className="flex gap-4">
 							{[
-								{ icon: "🎨", title: "视觉", color: "from-purple-100 to-pink-100" },
-								{ icon: "⚡", title: "性能", color: "from-amber-100 to-orange-100" },
-								{ icon: "🎯", title: "精准", color: "from-emerald-100 to-teal-100" },
+								{ icon: "🎨", title: "视觉", color: "#f5f0e8" },
+								{ icon: "⚡", title: "性能", color: "#faf8f5" },
+								{ icon: "🎯", title: "精准", color: "#f5f5f0" },
 							].map((card, i) => (
 								<div
 									key={i}
-									className={`w-20 h-28 rounded-xl bg-gradient-to-br ${card.color} flex flex-col items-center justify-center shadow-md border border-ink-200 anim-cardIn`}
+									className={`w-20 h-28 rounded-xl flex flex-col items-center justify-center shadow-md border border-ink/20 anim-cardIn`}
+									style={{ background: card.color }}
 									style={{ animationDelay: `${i * 0.1}s` }}
 								>
 									<span className="text-2xl">{card.icon}</span>
@@ -295,14 +296,14 @@ const ScrollMagicDemo: React.FC<ScrollMagicDemoProps> = () => {
 				</section>
 
 				{/* Section 4: 视差深度 - 国风 */}
-				<section className="sm-demo-section flex items-center justify-center bg-gradient-to-b from-purple-50/30 to-blue-50/30 relative overflow-hidden">
+				<section className="sm-demo-section flex items-center justify-center relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #faf8f5 0%, #f5f0e8 100%)' }}>
 					<div className="absolute top-6 left-6 text-xs text-ink-light">03</div>
 					<h2 className="absolute top-6 left-12 text-lg font-medium text-ink-deep">视差深度效果</h2>
 
 					{/* 浮动元素 - 国风柔和色 */}
-					<div className="absolute w-16 h-16 rounded-full bg-gradient-to-br from-yellow-100/50 to-orange-100/50 blur-xl top-1/4 left-1/4 anim-float" />
-					<div className="absolute w-14 h-14 rounded-full bg-gradient-to-br from-cyan-100/50 to-blue-100/50 blur-xl bottom-1/3 right-1/4 anim-float-delay-1" />
-					<div className="absolute w-20 h-20 rounded-full bg-gradient-to-br from-pink-100/50 to-purple-100/50 blur-xl top-1/3 right-1/3 anim-float-delay-2" />
+					<div className="absolute w-16 h-16 rounded-full bg-ink/5 blur-xl top-1/4 left-1/4 anim-float" />
+					<div className="absolute w-14 h-14 rounded-full bg-ink/5 blur-xl bottom-1/3 right-1/4 anim-float-delay-1" />
+					<div className="absolute w-20 h-20 rounded-full bg-ink/5 blur-xl top-1/3 right-1/3 anim-float-delay-2" />
 
 					<div className="text-center z-10">
 						<h3 className="text-xl font-bold text-ink-deep mb-2">视差深度</h3>
@@ -310,20 +311,20 @@ const ScrollMagicDemo: React.FC<ScrollMagicDemoProps> = () => {
 
 						<div className="flex gap-6 mt-8">
 							<div className="anim-float">
-								<div className="w-10 h-10 rounded-lg bg-gradient-to-br from-yellow-200 to-orange-200 shadow-md" />
+								<div className="w-10 h-10 rounded-lg bg-paper-warm/50 shadow-md border border-ink/10" />
 							</div>
 							<div className="anim-float-delay-1">
-								<div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-200 to-pink-200 shadow-md" />
+								<div className="w-10 h-10 rounded-lg bg-paper-warm/50 shadow-md border border-ink/10" />
 							</div>
 							<div className="anim-float-delay-2">
-								<div className="w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-200 to-blue-200 shadow-md" />
+								<div className="w-10 h-10 rounded-lg bg-paper-warm/50 shadow-md border border-ink/10" />
 							</div>
 						</div>
 					</div>
 				</section>
 
 				{/* Section 5: 形态变换 - 国风 */}
-				<section className="sm-demo-section flex items-center justify-center bg-gradient-to-b from-fuchsia-50/50 to-purple-50/50">
+				<section className="sm-demo-section flex items-center justify-center" style={{ background: 'linear-gradient(180deg, #f5f0e8 50%, #faf8f5 50%)' }}>
 					<div className="text-center">
 						<div className="mb-1 text-xs text-ink-light">04</div>
 						<h2 className="text-lg font-medium text-ink-deep mb-8">形态变换动画</h2>
@@ -333,7 +334,7 @@ const ScrollMagicDemo: React.FC<ScrollMagicDemoProps> = () => {
 							<div className="absolute inset-0 border border-ink-200 rounded-full anim-rotate" style={{ width: "140%", height: "140%", top: "-20%", left: "-20%" }} />
 
 							{/* 变换元素 - 国风配色 */}
-							<div className="w-full h-full bg-gradient-to-br from-purple-200 via-pink-200 to-rose-200 anim-morph flex items-center justify-center shadow-md">
+							<div className="w-full h-full bg-paper-warm anim-morph flex items-center justify-center shadow-md border border-ink/10">
 								<span className="text-4xl">🎭</span>
 							</div>
 						</div>

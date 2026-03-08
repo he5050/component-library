@@ -9,10 +9,10 @@ type PageType = "home" | "about" | "work" | "contact"
 
 // 页面配置 - 国风配色
 const PAGES: Record<PageType, { title: string; subtitle: string; color: string; icon: string; glow: string; border: string }> = {
-	home: { title: "首页", subtitle: "Home", color: "from-purple-50 to-purple-100", icon: "🏠", glow: "rgba(147, 112, 219, 0.15)", border: "border-purple-200" },
-	about: { title: "关于", subtitle: "About", color: "from-blue-50 to-cyan-50", icon: "👤", glow: "rgba(59, 130, 246, 0.15)", border: "border-blue-200" },
-	work: { title: "作品", subtitle: "Work", color: "from-orange-50 to-rose-50", icon: "💼", glow: "rgba(249, 115, 22, 0.15)", border: "border-orange-200" },
-	contact: { title: "联系", subtitle: "Contact", color: "from-emerald-50 to-teal-50", icon: "✉️", glow: "rgba(16, 185, 129, 0.15)", border: "border-emerald-200" },
+	home: { title: "首页", subtitle: "Home", color: "#faf8f5", icon: "🏠", glow: "rgba(26, 26, 23, 0.08)", border: "border-ink/10" },
+	about: { title: "关于", subtitle: "About", color: "#f5f0e8", icon: "👤", glow: "rgba(26, 26, 23, 0.08)", border: "border-ink/10" },
+	work: { title: "作品", subtitle: "Work", color: "#faf8f5", icon: "💼", glow: "rgba(26, 26, 23, 0.08)", border: "border-ink/10" },
+	contact: { title: "联系", subtitle: "Contact", color: "#f5f0e8", icon: "✉️", glow: "rgba(26, 26, 23, 0.08)", border: "border-ink/10" },
 }
 
 // 过渡类型
@@ -335,7 +335,8 @@ const HighwayDemo: React.FC<HighwayDemoProps> = () => {
 				>
 					{/* 页面卡片 - 国风版本 */}
 					<div
-						className={`relative rounded-2xl bg-gradient-to-br ${currentPageData.color} p-6 card-glow overflow-hidden border ${currentPageData.border}`}
+						className={`relative rounded-2xl p-6 card-glow overflow-hidden border ${currentPageData.border}`}
+						style={{ background: currentPageData.color }}
 					>
 						{/* 卡片高光层 */}
 						<div className="absolute inset-0 bg-gradient-to-br from-white/60 via-white/20 to-transparent pointer-events-none" />

@@ -10,7 +10,7 @@ const componentsDir = path.resolve(srcRoot, "components");
 const demosDir = path.resolve(srcRoot, "demos");
 const manifestPath = path.resolve(projectRoot, "preview-manifest.json");
 
-const VALID_EXTENSIONS = new Set([".tsx", "jsx", ".ts", ".js"]);
+const VALID_EXTENSIONS = new Set([".tsx", ".jsx", ".ts", ".js"]);
 const EXCLUDED_FILES = new Set(["index.tsx", "index.jsx", "index.ts", "index.js"]);
 
 /**
