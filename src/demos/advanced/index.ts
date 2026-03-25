@@ -1,2 +1,2 @@
-export { default as BarbaGsapDemo } from "./BarbaGsapDemo"
-export { default as PtsDemo } from "./PtsDemo"
+export { default as VirtualListDemo } from './VirtualListDemo'
+export { default as VirtualSelectDemo } from './VirtualSelectDemo'
