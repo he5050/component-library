@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@barba/core": "^2.10.3",
+    "@tanstack/react-virtual": "^3.13.23",
     "@types/scrollmagic": "^2.0.8",
     "dynamics.js": "^1.1.5",
     "granim": "^2.0.0",
@@ -26,7 +27,8 @@
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.1.0",
     "scrollmagic": "^2.0.9",
-    "velocity-animate": "^2.0.6"
+    "velocity-animate": "^2.0.6",
+    "wavesurfer.js": "^7.12.5"
   },
   "devDependencies": {
     "@types/animejs": "^3.1.13",

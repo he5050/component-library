@@ -120,6 +120,12 @@ const componentMetadata: Record<string, ComponentMetadata> = {
 		layer: "base",
 	},
 	AnimationDemo: { name: "动画库演示", description: "水墨风格动画库演示", category: "高阶组件", layer: "advanced" },
+	WaveSurferjsDemo: {
+		name: "WaveSurfer.js 音频波形",
+		description: "让音频波形在指尖舞动，把声音可视化变得优雅简单",
+		category: "示例演示",
+		layer: "base",
+	},
 }
 
 const componentToDemoMap: Record<string, string> = {
